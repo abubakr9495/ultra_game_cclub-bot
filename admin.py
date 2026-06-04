@@ -147,6 +147,16 @@ async def approve_booking(call: CallbackQuery, bot: Bot):
     await call.message.edit_text(f"✅ <b>Bron #{booking_id} tasdiqlandi</b>", parse_mode="HTML")
     await call.answer("✅ Tasdiqlandi!")
 
+booking = await db.get_pending_bookings()
+    try:
+        await bot.send_message(
+            int(call.message.text.split("User ID: ")[1].strip()),
+            "✅ <b>Broningiz tasdiqlandi!</b>\n\nSizni kutamiz! 🎮",
+            parse_mode="HTML"
+        )
+    except Exception:
+        pass
+
 @router.callback_query(F.data.startswith("book_reject:"))
 async def reject_booking(call: CallbackQuery, bot: Bot):
     if not is_admin(call.from_user.id):
@@ -156,6 +166,15 @@ async def reject_booking(call: CallbackQuery, bot: Bot):
     await db.update_booking_status(booking_id, "rejected")
     await call.message.edit_text(f"❌ <b>Bron #{booking_id} rad etildi</b>", parse_mode="HTML")
     await call.answer("❌ Rad etildi!")
+try:
+
+        await bot.send_message(
+            int(call.message.text.split("User ID: ")[1].strip()),
+            "❌ <b>Broningiz rad etildi.</b>\n\nQo'shimcha ma'lumot: +998996862274",
+            parse_mode="HTML"
+        )
+    except Exception:
+        pass
 
 # ─── USERS LIST ───────────────────────────────────────────
 @router.message(F.text == "👥 Foydalanuvchilar")
