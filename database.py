@@ -26,7 +26,7 @@ async def init_db():
         await db.execute("""
             CREATE TABLE IF NOT EXISTS bonuses (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
+               user_id INTEGER UNIQUE NOT NULL,
                 amount INTEGER DEFAULT 0,
                 FOREIGN KEY (user_id) REFERENCES users(telegram_id)
             )
