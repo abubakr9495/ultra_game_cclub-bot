@@ -73,7 +73,7 @@ async def approve_play(call: CallbackQuery, bot: Bot):
     play_count = await db.get_play_count(req["user_id"])
     bonus_msg = ""
     if play_count % 10 == 0 and play_count > 0:
-        await db.add_bonus(req["user_id"], 50000)
+        await db.add_bonus(req["user_id"], 5000)
         bonus_msg = "\n\n🎉 <b>Tabriklaymiz! 5000 bonus qo'shildi!</b>"
 
     await call.message.edit_text(
