@@ -158,6 +158,8 @@ async def approve_booking(call: CallbackQuery, bot: Bot):
         parse_mode="HTML"
     )
     await call.answer("✅ Tasdiqlandi!")
+
+    try:
         await bot.send_message(
             booking["user_id"],
             f"✅ <b>Broningiz tasdiqlandi!</b>\n\n"
