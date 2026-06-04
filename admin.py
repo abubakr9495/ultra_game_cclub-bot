@@ -142,15 +142,21 @@ async def approve_booking(call: CallbackQuery, bot: Bot):
     if not is_admin(call.from_user.id):
         await call.answer("❌ Ruxsat yo'q!", show_alert=True)
         return
-    booking_id = int(call.data.split(":")[1])
+    parts = call.data.split(":")
+    booking_id = int(parts[1])
+    booking = await db.get_booking(booking_id)
+    if not booking:
+        await call.answer("Bron topilmadi!", show_alert=True)
+        return
     await db.update_booking_status(booking_id, "approved")
     await call.message.edit_text(f"✅ <b>Bron #{booking_id} tasdiqlandi</b>", parse_mode="HTML")
     await call.answer("✅ Tasdiqlandi!")
     try:
-        user_id = int(call.message.text.split("User ID: ")[1].strip())
         await bot.send_message(
-            user_id,
-            "✅ <b>Broningiz tasdiqlandi!</b>\n\nSizni kutamiz! 🎮",
+            booking["user_id"],
+            f"✅ <b>Broningiz tasdiqlandi!</b>\n\n"
+            f"📆 Vaqt: {booking['date_time']}\n\n"
+            f"Sizni kutamiz! 🎮",
             parse_mode="HTML"
         )
     except Exception:
@@ -161,15 +167,19 @@ async def reject_booking(call: CallbackQuery, bot: Bot):
     if not is_admin(call.from_user.id):
         await call.answer("❌ Ruxsat yo'q!", show_alert=True)
         return
-    booking_id = int(call.data.split(":")[1])
+    parts = call.data.split(":")
+    booking_id = int(parts[1])
+    booking = await db.get_booking(booking_id)
+    if not booking:
+        await call.answer("Bron topilmadi!", show_alert=True)
+        return
     await db.update_booking_status(booking_id, "rejected")
     await call.message.edit_text(f"❌ <b>Bron #{booking_id} rad etildi</b>", parse_mode="HTML")
     await call.answer("❌ Rad etildi!")
     try:
-        user_id = int(call.message.text.split("User ID: ")[1].strip())
         await bot.send_message(
-            user_id,
-            "❌ <b>Broningiz rad etildi.</b>\n\nQo'shimcha ma'lumot: +998996862274",
+            booking["user_id"],
+            "❌ <b>Broningiz rad etildi.</b>\n\nQo'shimcha ma'lumot uchun bog'laning: +998996862274",
             parse_mode="HTML"
         )
     except Exception:
