@@ -178,7 +178,15 @@ async def update_booking_status(booking_id: int, status: str):
     async with aiosqlite.connect(DB_PATH) as db:
         await db.execute("UPDATE bookings SET status=? WHERE id=?", (status, booking_id))
         await db.commit()
-
+        
+async def get_booking(booking_id: int):
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute(
+            "SELECT * FROM bookings WHERE id=?",
+            (booking_id,)
+        ) as cur:
+            return await cur.fetchone()
 # ─── CONTACTS ─────────────────────────────────────────────
 async def add_contact(user_id: int, full_name: str, phone: str, message: str):
     async with aiosqlite.connect(DB_PATH) as db:
