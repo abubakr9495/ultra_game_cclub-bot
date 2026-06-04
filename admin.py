@@ -138,21 +138,26 @@ async def pending_bookings(msg: Message):
         )
 
 @router.callback_query(F.data.startswith("book_approve:"))
+@router.callback_query(F.data.startswith("book_approve:"))
 async def approve_booking(call: CallbackQuery, bot: Bot):
     if not is_admin(call.from_user.id):
         await call.answer("❌ Ruxsat yo'q!", show_alert=True)
         return
+
     parts = call.data.split(":")
     booking_id = int(parts[1])
-   booking = await db.get_booking(booking_id)
+    booking = await db.get_booking(booking_id)
 
-if not booking:
-    await call.answer("Bron topilmadi!", show_alert=True)
-    return
+    if not booking:
+        await call.answer("Bron topilmadi!", show_alert=True)
+        return
+
     await db.update_booking_status(booking_id, "approved")
-    await call.message.edit_text(f"✅ <b>Bron #{booking_id} tasdiqlandi</b>", parse_mode="HTML")
+    await call.message.edit_text(
+        f"✅ <b>Bron #{booking_id} tasdiqlandi</b>",
+        parse_mode="HTML"
+    )
     await call.answer("✅ Tasdiqlandi!")
-    try:
         await bot.send_message(
             booking["user_id"],
             f"✅ <b>Broningiz tasdiqlandi!</b>\n\n"
