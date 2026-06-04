@@ -138,6 +138,13 @@ async def my_bonuses(msg: Message):
     count = await db.get_play_count(msg.from_user.id)
     bonus = await db.get_bonus(msg.from_user.id)
 
+    from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+    kb = None
+    if bonus > 0:
+        kb = InlineKeyboardMarkup(inline_keyboard=[[
+            InlineKeyboardButton(text="💳 Bonusni ishlatish", callback_data="use_bonus")
+        ]])
+
     await msg.answer(
         f"🎁 <b>Mening bonuslarim</b>\n\n"
         f"💰 Joriy bonuslar: <b>{bonus}</b>\n"
@@ -148,8 +155,72 @@ async def my_bonuses(msg: Message):
         f"📊 Joriy holat: {count % 10}/10\n"
         f"{'🟩' * (count % 10)}{'⬜' * (10 - count % 10)}",
         parse_mode="HTML",
-        reply_markup=main_menu()
+        reply_markup=kb if kb else main_menu()
     )
+
+@router.callback_query(F.data == "use_bonus")
+async def use_bonus_request(call: CallbackQuery, bot: Bot):
+    user = await db.get_user(call.from_user.id)
+    bonus = await db.get_bonus(call.from_user.id)
+    if bonus <= 0:
+        await call.answer("❌ Bonusingiz yo'q!", show_alert=True)
+        return
+    await call.answer("✅ So'rovingiz adminga yuborildi!", show_alert=True)
+    await call.message.edit_text(
+        f"🎁 <b>Mening bonuslarim</b>\n\n"
+        f"💰 Joriy bonuslar: <b>{bonus}</b>\n\n"
+        f"⏳ Bonus ishlatish so'rovi adminga yuborildi...",
+        parse_mode="HTML"
+    )
+    from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+    kb = InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="✅ Tasdiqlash", callback_data=f"bonus_use_approve:{call.from_user.id}:{bonus}"),
+        InlineKeyboardButton(text="❌ Rad etish", callback_data=f"bonus_use_reject:{call.from_user.id}"),
+    ]])
+    await bot.send_message(
+        ADMIN_ID,
+        f"💳 <b>Bonus ishlatish so'rovi</b>\n\n"
+        f"👤 Ism: {user['full_name']}\n"
+        f"📱 Tel: {user['phone']}\n"
+        f"💰 Bonus: <b>{bonus}</b>\n"
+        f"🆔 ID: {call.from_user.id}",
+        parse_mode="HTML",
+        reply_markup=kb
+    )
+
+@router.callback_query(F.data.startswith("bonus_use_approve:"))
+async def bonus_use_approve(call: CallbackQuery, bot: Bot):
+    parts = call.data.split(":")
+    user_id = int(parts[1])
+    bonus = int(parts[2])
+    await db.set_bonus(user_id, 0)
+    await call.message.edit_text(
+        f"✅ <b>Bonus ishlatish tasdiqlandi!</b>\n💰 {bonus} bonus ayirildi.",
+        parse_mode="HTML"
+    )
+    await call.answer("✅ Tasdiqlandi!")
+    try:
+        await bot.send_message(
+            user_id,
+            f"✅ <b>{bonus} bonusingiz muvaffaqiyatli ishlatildi!</b>\n\n💰 Joriy bonuslar: 0",
+            parse_mode="HTML"
+        )
+    except Exception:
+        pass
+
+@router.callback_query(F.data.startswith("bonus_use_reject:"))
+async def bonus_use_reject(call: CallbackQuery, bot: Bot):
+    user_id = int(call.data.split(":")[1])
+    await call.message.edit_text("❌ <b>Bonus ishlatish rad etildi.</b>", parse_mode="HTML")
+    await call.answer("❌ Rad etildi!")
+    try:
+        await bot.send_message(
+            user_id,
+            "❌ <b>Bonus ishlatish so'rovingiz rad etildi.</b>",
+            parse_mode="HTML"
+        )
+    except Exception:
+        pass
 
 # ─── PANEL 3: JOY BRON QILISH ─────────────────────────────
 @router.message(F.text == "📅 Joy bron qilish")
@@ -264,7 +335,7 @@ async def contact_message(msg: Message, state: FSMContext, bot: Bot):
     await state.clear()
     await msg.answer(
         "✅ <b>Murojatingiz qabul qilindi!</b>\n\n"
-        "Tez orada siz bilan bog'lanamiz. Rahmat!",
+        "Tez orada siz bilan bog'lanamiz. Rahmat! 🙏",
         parse_mode="HTML",
         reply_markup=main_menu()
     )
