@@ -144,9 +144,11 @@ async def approve_booking(call: CallbackQuery, bot: Bot):
         return
     parts = call.data.split(":")
     booking_id = int(parts[1])
-    if not booking:
-        await call.answer("Bron topilmadi!", show_alert=True)
-        return
+   booking = await db.get_booking(booking_id)
+
+if not booking:
+    await call.answer("Bron topilmadi!", show_alert=True)
+    return
     await db.update_booking_status(booking_id, "approved")
     await call.message.edit_text(f"✅ <b>Bron #{booking_id} tasdiqlandi</b>", parse_mode="HTML")
     await call.answer("✅ Tasdiqlandi!")
