@@ -144,14 +144,6 @@ async def approve_booking(call: CallbackQuery, bot: Bot):
         return
     parts = call.data.split(":")
     booking_id = int(parts[1])
-    booking = await db.get_booking(booking_id)async def get_booking(booking_id: int):
-    async with aiosqlite.connect(DB_PATH) as db:
-        db.row_factory = aiosqlite.Row
-        async with db.execute(
-            "SELECT * FROM bookings WHERE id=?",
-            (booking_id,)
-        ) as cur:
-            return await cur.fetchone()
     if not booking:
         await call.answer("Bron topilmadi!", show_alert=True)
         return
