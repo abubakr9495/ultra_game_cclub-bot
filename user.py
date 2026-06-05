@@ -328,6 +328,7 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         msg.from_user.id, data["full_name"], data["phone"], data["room"], msg.text.strip()
     )
     await state.clear()
+    
     await msg.answer(
     f"✅ <b>Broningiz qabul qilindi!</b>\n\n"
     f"🏠 Xona: {data['room']}\n"
@@ -338,14 +339,6 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
     f"quyidagi raqamga murojaat qiling:</b>\n📞 {CONTACT_PHONE}",
     parse_mode="HTML",
     reply_markup=main_menu()
-)
-)
-        f"✅ <b>Broningiz qabul qilindi!</b>\n\n"
-     
-        f"⏳ <b>Hurmatli mijoz, sizga 5-10 daqiqa ichida javob kelmasa,\n"
-        f"quyidagi raqamga murojaat qiling:</b>\n📞 {CONTACT_PHONE}",
-        parse_mode="HTML",
-        reply_markup=main_menu()
     )
     from keyboards import booking_action_kb
     await bot.send_message(
