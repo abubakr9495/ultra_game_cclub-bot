@@ -35,10 +35,11 @@ async def init_db():
             CREATE TABLE IF NOT EXISTS bookings (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER NOT NULL,
-                full_name TEXT,
-                phone TEXT,
-                date_time TEXT,
-                status TEXT DEFAULT 'pending',
+               full_name TEXT,
+phone TEXT,
+room TEXT,
+date_time TEXT,
+status TEXT DEFAULT 'pending',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users(telegram_id)
             )
@@ -157,11 +158,11 @@ async def get_all_bonuses():
             return await cur.fetchall()
 
 # ─── BOOKINGS ─────────────────────────────────────────────
-async def add_booking(user_id: int, full_name: str, phone: str, date_time: str):
+async def add_booking(user_id: int, full_name: str, phone: str, room: str date_time: str):
     async with aiosqlite.connect(DB_PATH) as db:
         cur = await db.execute(
             "INSERT INTO bookings (user_id, full_name, phone, date_time) VALUES (?,?,?,?)",
-            (user_id, full_name, phone, date_time)
+            (user_id, full_name, phone, room, date_time)
         )
         await db.commit()
         return cur.lastrowid
