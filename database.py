@@ -158,7 +158,7 @@ async def get_all_bonuses():
             return await cur.fetchall()
 
 # ─── BOOKINGS ─────────────────────────────────────────────
-async def add_booking(user_id: int, full_name: str, phone: str, room: str date_time: str):
+async def add_booking(user_id: int, full_name: str, phone: str, room: str, date_time: str):
     async with aiosqlite.connect(DB_PATH) as db:
         cur = await db.execute(
             "INSERT INTO bookings (user_id, full_name, phone, date_time) VALUES (?,?,?,?)",
