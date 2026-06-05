@@ -314,12 +314,6 @@ async def booking_name(msg: Message, state: FSMContext):
     await msg.answer("📱 Telefon raqamingizni kiriting (masalan: +998901234567):")
     await state.set_state(Booking.waiting_phone)
 
-@router.message(Booking.waiting_name)
-async def booking_name(msg: Message, state: FSMContext):
-    await state.update_data(full_name=msg.text.strip())
-    await msg.answer("📱 Telefon raqamingizni kiriting (masalan: +998901234567):")
-    await state.set_state(Booking.waiting_phone)
-
 @router.message(Booking.waiting_phone, F.text == "❌ Bekor qilish")
 async def cancel_booking_phone(msg: Message, state: FSMContext):
     await state.clear()
