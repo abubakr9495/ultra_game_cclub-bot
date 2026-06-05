@@ -59,10 +59,20 @@ status TEXT DEFAULT 'pending',
 
 # ─── USERS ────────────────────────────────────────────────
 async def get_user(telegram_id: int):
+    print("SEARCH USER:", telegram_id)
+
     async with aiosqlite.connect(DB_PATH) as db:
         db.row_factory = aiosqlite.Row
-        async with db.execute("SELECT * FROM users WHERE telegram_id=?", (telegram_id,)) as cur:
-            return await cur.fetchone()
+
+        async with db.execute(
+            "SELECT * FROM users WHERE telegram_id=?",
+            (telegram_id,)
+        ) as cur:
+
+            user = await cur.fetchone()
+            print("FOUND:", user)
+
+            return user
 
 async def create_user(telegram_id: int, full_name: str, phone: str):
     async with aiosqlite.connect(DB_PATH) as db:
