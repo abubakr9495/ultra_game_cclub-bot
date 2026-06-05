@@ -291,7 +291,7 @@ async def booking_room(msg: Message, state: FSMContext):
         "👤 Ismingizni kiriting:"
     )
 
- @router.message(Booking.waiting_room)
+@router.message(Booking.waiting_room)
 async def booking_room(msg: Message, state: FSMContext):
     room = msg.text.strip()
 
