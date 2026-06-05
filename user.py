@@ -329,12 +329,19 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
     )
     await state.clear()
     await msg.answer(
+        await msg.answer(
+    f"✅ <b>Broningiz qabul qilindi!</b>\n\n"
+    f"🏠 Xona: {data['room']}\n"
+    f"👤 Ism: {data['full_name']}\n"
+    f"📱 Tel: {data['phone']}\n"
+    f"📅 Vaqt: {msg.text.strip()}\n\n"
+    f"⏳ <b>Hurmatli mijoz, sizga 5-10 daqiqa ichida javob kelmasa,\n"
+    f"quyidagi raqamga murojaat qiling:</b>\n📞 {CONTACT_PHONE}",
+    parse_mode="HTML",
+    reply_markup=main_menu()
+)
         f"✅ <b>Broningiz qabul qilindi!</b>\n\n"
-       full_name TEXT,
-phone TEXT,
-room TEXT,
-date_time TEXT,
-status TEXT DEFAULT 'pending',
+     
         f"⏳ <b>Hurmatli mijoz, sizga 5-10 daqiqa ichida javob kelmasa,\n"
         f"quyidagi raqamga murojaat qiling:</b>\n📞 {CONTACT_PHONE}",
         parse_mode="HTML",
