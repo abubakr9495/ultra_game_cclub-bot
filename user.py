@@ -274,11 +274,6 @@ async def cancel_action(msg: Message, state: FSMContext):
     await state.clear()
     await msg.answer("❌ Bekor qilindi.", reply_markup=main_menu())
 
-@router.message(Booking.waiting_name)
-@router.message(Booking.waiting_room)
-async def booking_room(msg: Message, state: FSMContext):
-    room = msg.text.strip()
-
 @router.message(Booking.waiting_room)
 async def booking_room(msg: Message, state: FSMContext):
     room = msg.text.strip()
