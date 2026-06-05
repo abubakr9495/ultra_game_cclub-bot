@@ -332,7 +332,7 @@ async def cancel_booking_dt(msg: Message, state: FSMContext):
 
 @router.message(Booking.waiting_datetime)
 async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
-    @router.message(Booking.waiting_datetime)
+@router.message(Booking.waiting_datetime)
 async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
     data = await state.get_data()
 
