@@ -160,7 +160,7 @@ async def profile(msg: Message):
 
 # ─── PANEL 2: BONUSLARIM ─────────────────────────
 @router.message(F.text == "🎁 Mening bonuslarim")
-async def my_bonuses(msg: Message):
+
 # ─── PANEL 2: BONUSLARIM ──────────────────────────────────
 @router.message(F.text == "🎁 Mening bonuslarim")
 async def my_bonuses(msg: Message):
