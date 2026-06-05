@@ -138,7 +138,6 @@ async def pending_bookings(msg: Message):
         )
 
 @router.callback_query(F.data.startswith("book_approve:"))
-@router.callback_query(F.data.startswith("book_approve:"))
 async def approve_booking(call: CallbackQuery, bot: Bot):
     if not is_admin(call.from_user.id):
         await call.answer("❌ Ruxsat yo'q!", show_alert=True)
