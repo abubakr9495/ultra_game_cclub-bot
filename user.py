@@ -130,7 +130,37 @@ async def i_played(call: CallbackQuery, bot: Bot):
         parse_mode="HTML",
         reply_markup=play_action_kb(req_id)
     )
+@router.message(F.text == "👤 Profil")
+async def profile(msg: Message):
+    if not await check_reg(msg):
+        return
 
+    user = await db.get_user(msg.from_user.id)
+    count = await db.get_play_count(msg.from_user.id)
+    bonus = await db.get_bonus(msg.from_user.id)
+
+    if count >= 250:
+        status = "💎 Platinum"
+    elif count >= 100:
+        status = "🥇 Gold"
+    elif count >= 50:
+        status = "🥈 Silver"
+    else:
+        status = "⭐ Oddiy"
+
+    await msg.answer(
+        f"👤 <b>Profil</b>\n\n"
+        f"🧑 Ism: <b>{user['full_name']}</b>\n"
+        f"📱 Telefon: <b>{user['phone']}</b>\n\n"
+        f"🎮 Jami o'yinlar: <b>{count}</b>\n"
+        f"🎁 Bonuslar: <b>{bonus}</b>\n"
+        f"🏆 Status: <b>{status}</b>",
+        parse_mode="HTML"
+    )
+
+# ─── PANEL 2: BONUSLARIM ─────────────────────────
+@router.message(F.text == "🎁 Mening bonuslarim")
+async def my_bonuses(msg: Message):
 # ─── PANEL 2: BONUSLARIM ──────────────────────────────────
 @router.message(F.text == "🎁 Mening bonuslarim")
 async def my_bonuses(msg: Message):
