@@ -56,7 +56,7 @@ async def reg_name(msg: Message, state: FSMContext):
     )
     await state.set_state(Register.waiting_phone)
 
-@router.message(Register.waiting_phone)
+@router.message(Register.waiting_phone,F.contact)
 async def reg_phone_contact(msg: Message, state: FSMContext):
     if not msg.contact:
         await msg.answer(
@@ -87,8 +87,8 @@ async def reg_phone_contact(msg: Message, state: FSMContext):
         parse_mode="HTML",
         reply_markup=main_menu()
     )
-@router.message(Register.waiting_phone, F.text)
-async def reg_phone_text(msg: Message, state: FSMContext):
+@router.message(Register.waiting_phone)
+async def reg_phone_text(msg: Message):
     await msg.answer("📱 Iltimos, tugma orqali telefon raqamingizni yuboring:", reply_markup=share_contact_kb())
 
 # ─── CHECK REGISTRATION ───────────────────────────────────
