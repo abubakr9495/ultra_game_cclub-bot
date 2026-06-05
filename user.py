@@ -291,7 +291,30 @@ async def booking_room(msg: Message, state: FSMContext):
         "👤 Ismingizni kiriting:"
     )
 
-   await state.set_state(Booking.waiting_name)
+ @router.message(Booking.waiting_room)
+async def booking_room(msg: Message, state: FSMContext):
+    room = msg.text.strip()
+
+    if room not in [
+        "Chap xona", "O'ng xona", "Zal",
+        "1", "2", "3",
+        "1️⃣ Chap xona", "2️⃣ O'ng xona", "3️⃣ Zal"
+    ]:
+        await msg.answer("🏠 Xonani tanlang:\nChap xona\nO'ng xona\nZal")
+        return
+
+    await state.update_data(room=room)
+
+    await msg.answer("👤 Ismingizni kiriting:")
+
+    await state.set_state(Booking.waiting_name)
+
+
+@router.message(Booking.waiting_name)
+async def booking_name(msg: Message, state: FSMContext):
+    await state.update_data(full_name=msg.text.strip())
+    await msg.answer("📱 Telefon raqamingizni kiriting (masalan: +998901234567):")
+    await state.set_state(Booking.waiting_phone)
 
 @router.message(Booking.waiting_name)
 async def booking_name(msg: Message, state: FSMContext):
