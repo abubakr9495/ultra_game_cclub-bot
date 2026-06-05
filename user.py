@@ -325,14 +325,16 @@ async def cancel_booking_dt(msg: Message, state: FSMContext):
 async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
     data = await state.get_data()
     booking_id = await db.add_booking(
-        msg.from_user.id, data["full_name"], data["phone"], msg.text.strip()
+        msg.from_user.id, data["full_name"], data["phone"], data["room"], msg.text.strip()
     )
     await state.clear()
     await msg.answer(
         f"✅ <b>Broningiz qabul qilindi!</b>\n\n"
-        f"👤 Ism: {data['full_name']}\n"
-        f"📱 Tel: {data['phone']}\n"
-        f"📆 Vaqt: {msg.text.strip()}\n\n"
+       full_name TEXT,
+phone TEXT,
+room TEXT,
+date_time TEXT,
+status TEXT DEFAULT 'pending',
         f"⏳ <b>Hurmatli mijoz, sizga 5-10 daqiqa ichida javob kelmasa,\n"
         f"quyidagi raqamga murojaat qiling:</b>\n📞 {CONTACT_PHONE}",
         parse_mode="HTML",
