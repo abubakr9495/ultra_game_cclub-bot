@@ -8,9 +8,12 @@ def main_menu():
     return ReplyKeyboardMarkup(
         keyboard=[
             [KeyboardButton(text="🎮 Mening o'ynaganlarim"),
-             KeyboardButton(text="🎁 Mening bonuslarim")],
-            [KeyboardButton(text="📅 Joy bron qilish"),
-             KeyboardButton(text="📨 Murojat uchun")],
+ KeyboardButton(text="🎁 Mening bonuslarim")],
+
+[KeyboardButton(text="👤 Profil"),
+ KeyboardButton(text="📅 Joy bron qilish")],
+
+[KeyboardButton(text="📨 Murojat uchun")],
         ],
         resize_keyboard=True
     )
