@@ -56,22 +56,37 @@ async def reg_name(msg: Message, state: FSMContext):
     )
     await state.set_state(Register.waiting_phone)
 
-@router.message(Register.waiting_phone, F.contact)
+@router.message(Register.waiting_phone)
 async def reg_phone_contact(msg: Message, state: FSMContext):
+    if not msg.contact:
+        await msg.answer(
+            "📱 Iltimos, tugma orqali telefon raqamingizni yuboring:",
+            reply_markup=share_contact_kb()
+        )
+        return
+
     data = await state.get_data()
+
     phone = msg.contact.phone_number
     if not phone.startswith("+"):
         phone = "+" + phone
-    await db.create_user(msg.from_user.id, data["full_name"], phone)
+
+    await db.create_user(
+        msg.from_user.id,
+        data["full_name"],
+        phone
+    )
+
     await state.clear()
+
     await msg.answer(
         f"✅ <b>Ro'yxatdan o'tdingiz!</b>\n\n"
-        f"👤 Ism: {data['full_name']}\n📱 Tel: {phone}\n\n"
-        "🎮 Asosiy menyuga xush kelibsiz!",
+        f"👤 Ism: {data['full_name']}\n"
+        f"📱 Tel: {phone}\n\n"
+        f"🎮 Asosiy menyuga xush kelibsiz!",
         parse_mode="HTML",
         reply_markup=main_menu()
     )
-
 @router.message(Register.waiting_phone, F.text)
 async def reg_phone_text(msg: Message, state: FSMContext):
     await msg.answer("📱 Iltimos, tugma orqali telefon raqamingizni yuboring:", reply_markup=share_contact_kb())
