@@ -176,7 +176,17 @@ async def add_booking(user_id: int, full_name: str, phone: str, room: str, date_
         )
         await db.commit()
         return cur.lastrowid
-
+        
+async def is_time_busy(room: str, date_time: str):
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            """
+            SELECT id FROM bookings
+            WHERE room=? AND date_time=? AND status IN ('pending','approved')
+            """,
+            (room, date_time)
+        ) as cur:
+            return await cur.fetchone() is not None
 async def get_pending_bookings():
     async with aiosqlite.connect(DB_PATH) as db:
         db.row_factory = aiosqlite.Row
