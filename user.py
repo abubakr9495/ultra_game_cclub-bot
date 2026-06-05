@@ -16,6 +16,7 @@ class Register(StatesGroup):
     waiting_phone = State()
 
 class Booking(StatesGroup):
+    waiting_room = State()
     waiting_name = State()
     waiting_phone = State()
     waiting_datetime = State()
@@ -255,15 +256,18 @@ async def bonus_use_reject(call: CallbackQuery, bot: Bot):
 # ─── PANEL 3: JOY BRON QILISH ─────────────────────────────
 @router.message(F.text == "📅 Joy bron qilish")
 async def booking_start(msg: Message, state: FSMContext):
-    if not await check_reg(msg): return
+    if not await check_reg(msg):
+        return
+
     await msg.answer(
-        "📅 <b>Joy bron qilish</b>\n\n"
-        "Ismingizni kiriting:",
-        parse_mode="HTML",
+        "🏠 Xonani tanlang:\n\n"
+        "1️⃣ Chap xona\n"
+        "2️⃣ O'ng xona\n"
+        "3️⃣ Zal",
         reply_markup=cancel_kb()
     )
-    await state.set_state(Booking.waiting_name)
 
+    await state.set_state(Booking.waiting_room)
 @router.message(Booking.waiting_name, F.text == "❌ Bekor qilish")
 @router.message(Contact.waiting_name, F.text == "❌ Bekor qilish")
 async def cancel_action(msg: Message, state: FSMContext):
@@ -271,6 +275,23 @@ async def cancel_action(msg: Message, state: FSMContext):
     await msg.answer("❌ Bekor qilindi.", reply_markup=main_menu())
 
 @router.message(Booking.waiting_name)
+@router.message(Booking.waiting_room)
+async def booking_room(msg: Message, state: FSMContext):
+    room = msg.text.strip()
+
+    if room not in ["Chap xona", "O'ng xona", "Zal",
+                    "1", "2", "3",
+                    "1️⃣ Chap xona", "2️⃣ O'ng xona", "3️⃣ Zal"]:
+        await msg.answer("🏠 Xonani tanlang:\nChap xona\nO'ng xona\nZal")
+        return
+
+    await state.update_data(room=room)
+
+    await msg.answer(
+        "👤 Ismingizni kiriting:"
+    )
+
+    await state.set_state(Booking.waiting_name)
 async def booking_name(msg: Message, state: FSMContext):
     await state.update_data(full_name=msg.text.strip())
     await msg.answer("📱 Telefon raqamingizni kiriting (masalan: +998901234567):")
