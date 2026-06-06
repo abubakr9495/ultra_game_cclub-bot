@@ -28,32 +28,26 @@ class Contact(StatesGroup):
 
 # ─── START / REGISTRATION ─────────────────────────────────
 @router.message(CommandStart())
+@router.message(CommandStart())
 async def cmd_start(msg: Message, state: FSMContext):
     args = msg.text.split()
-referrer_id = None
 
-if len(args) > 1:
-    try:
-        referrer_id = int(args[1])
-    except:
-        pass
-        
+    referrer_id = None
+
+    if len(args) > 1:
+        try:
+            referrer_id = int(args[1])
+        except:
+            pass
+
     user = await db.get_user(msg.from_user.id)
 
     if user:
         await msg.answer_photo(
-            photo="AgACAgIAAxkBAAIJDWokGjVQYZAopjXjokFrrJIdegABMgACbhhrG7D8IUnsPI0eUCE4gQEAAwIAA3kAAzsE",
+            photo="AgACAgIAAxkBAAIJ...",
             caption=
-            f"👏 Xush kelibsiz, <b>{user['full_name']}</b>\n\n"
-            "🎮 <b>ULTRA GAME CLUB</b>\n\n"
-            "🔥 Kuchli Gaming PC lar\n"
-            "📅 Joy bron qilish\n"
-            "🎁 Bonus tizimi\n"
-            "🏆 Turnirlar va musobaqalar\n\n"
-            "📍 Qarshi tumani, Beshket shahri\n"
-            "Navoiy MFY 75-uy\n\n"
-            "📞 +998996862274\n"
-            "🤖 @ultra_game_cclubbot",
+            f"👋 Xush kelibsiz, <b>{user['full_name']}</b>\n\n"
+            "🎮 <b>ULTRA GAME CLUB</b>\n\n",
             parse_mode="HTML"
         )
 
@@ -68,10 +62,10 @@ if len(args) > 1:
             "Ro'yxatdan o'tish uchun avval ismingizni kiriting:",
             parse_mode="HTML"
         )
-        
-await state.update_data(referrer_id=referrer_id)
-await state.set_state(Register.waiting_name)
 
+        await state.update_data(referrer_id=referrer_id)
+        await state.set_state(Register.waiting_name)
+        
 @router.message(Register.waiting_name)
 async def reg_name(msg: Message, state: FSMContext):
     if len(msg.text.strip()) < 2:
