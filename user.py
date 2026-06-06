@@ -274,12 +274,12 @@ async def booking_start(msg: Message, state: FSMContext):
     if not await check_reg(msg):
         return
 
-              room_kb = ReplyKeyboardMarkup(
+    room_kb = ReplyKeyboardMarkup(
         keyboard=[
- [KeyboardButton(text="1️⃣ Chap xona")],
- [KeyboardButton(text="2️⃣ O'ng xona")],
- [KeyboardButton(text="3️⃣ Zal")],
- [KeyboardButton(text="❌ Bekor qilish")]
+            [KeyboardButton(text="1️⃣ Chap xona")],
+            [KeyboardButton(text="2️⃣ O'ng xona")],
+            [KeyboardButton(text="3️⃣ Zal")],
+            [KeyboardButton(text="❌ Bekor qilish")]
         ],
         resize_keyboard=True
     )
@@ -291,8 +291,7 @@ async def booking_start(msg: Message, state: FSMContext):
 
     await state.set_state(Booking.waiting_room)
     
-@router.message(Booking.waiting_name, F.text == "❌ Bekor qilish")
-@router.message(Contact.waiting_name, F.text == "❌ Bekor qilish")
+    @router.message(F.text == "❌ Bekor Qilish") 
 async def cancel_action(msg: Message, state: FSMContext):
     await state.clear()
     await msg.answer("❌ Bekor qilindi.", reply_markup=main_menu())
