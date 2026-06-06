@@ -11,7 +11,9 @@ async def init_db():
                 telegram_id INTEGER UNIQUE NOT NULL,
                 full_name TEXT,
                 phone TEXT,
-                registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                referrer_id INTEGER DEFAULT NULL,
+ref_count INTEGER DEFAULT 0
             )
         """)
         await db.execute("""
@@ -74,11 +76,11 @@ async def get_user(telegram_id: int):
 
             return user
 
-async def create_user(telegram_id: int, full_name: str, phone: str):
+async def create_user(telegram_id: int, full_name: str, phone: str, referrer_id=None):
     async with aiosqlite.connect(DB_PATH) as db:
         await db.execute(
-            "INSERT OR IGNORE INTO users (telegram_id, full_name, phone) VALUES (?,?,?)",
-            (telegram_id, full_name, phone)
+            "INSERT OR IGNORE INTO users (telegram_id, full_name, phone, referrer_id) VALUES (?,?,?,?)",
+            (telegram_id, full_name, phone,referrer_id)
         )
         await db.execute(
             "INSERT OR IGNORE INTO bonuses (user_id, amount) VALUES (?,0)",
