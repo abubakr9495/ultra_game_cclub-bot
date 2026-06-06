@@ -18,6 +18,9 @@ def is_admin(user_id: int) -> bool:
 class BonusAdd(StatesGroup):
     waiting_amount = State()
 
+class BroadcastState(StatesGroup):
+    witing_text = state()
+
 # ─── ADMIN COMMANDS ───────────────────────────────────────
 @router.message(Command("admin"))
 async def admin_panel(msg: Message):
