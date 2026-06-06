@@ -311,11 +311,8 @@ elif room == "3️⃣ Zal":
     room = "Zal"
     
     await state.update_data(room=room)
-
     await msg.answer("👤 Ismingizni kiriting:")
-
     await state.set_state(Booking.waiting_name)
-
 
 @router.message(Booking.waiting_name)
 async def booking_name(msg: Message, state: FSMContext):
