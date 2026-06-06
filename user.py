@@ -109,7 +109,8 @@ async def reg_phone_contact(msg: Message, state: FSMContext):
     await db.create_user(
         msg.from_user.id,
         data["full_name"],
-        phone
+        phone,
+        data.get("referrer_id")
     )
 
     await state.clear()
