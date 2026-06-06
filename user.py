@@ -309,6 +309,7 @@ elif room == "2️⃣ O'ng xona":
 
 elif room == "3️⃣ Zal":
     room = "Zal"
+    
     await state.update_data(room=room)
 
     await msg.answer("👤 Ismingizni kiriting:")
