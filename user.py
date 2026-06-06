@@ -300,7 +300,15 @@ async def booking_room(msg: Message, state: FSMContext):
     ]:
         await msg.answer("🏠 Xonani tanlang:\nChap xona\nO'ng xona\nZal")
         return
+        
+if room == "1️⃣ Chap xona":
+    room = "Chap xona"
 
+elif room == "2️⃣ O'ng xona":
+    room = "O'ng xona"
+
+elif room == "3️⃣ Zal":
+    room = "Zal"
     await state.update_data(room=room)
 
     await msg.answer("👤 Ismingizni kiriting:")
