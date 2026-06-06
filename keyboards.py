@@ -42,7 +42,8 @@ def admin_menu():
             [KeyboardButton(text="👥 Foydalanuvchilar"),
              KeyboardButton(text="🎁 Bonuslarni boshqarish")],
             [KeyboardButton(text="📊 Statistika"),
-             KeyboardButton(text="🏠 Asosiy menyu")],
+             KeyboardButton(text="📢 E'lon yuborish"),
+            [KeyboardButton(text="🏠 Asosiy menyu")],
         ],
         resize_keyboard=True
     )
