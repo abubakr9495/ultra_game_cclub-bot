@@ -320,6 +320,14 @@ async def booking_start(msg: Message, state: FSMContext):
 async def booking_room(msg: Message, state: FSMContext):
     room = msg.text.strip()
 
+    if room == "❌ Bekor qilish":
+        await state.clear()
+        await msg.answer(
+            "❌ Bekor qilindi.",
+            reply_markup=main_menu()
+        )
+        return
+
     if room not in [
         "Chap xona",
         "O'ng xona",
