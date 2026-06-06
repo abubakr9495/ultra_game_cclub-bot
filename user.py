@@ -29,6 +29,16 @@ class Contact(StatesGroup):
 # ─── START / REGISTRATION ─────────────────────────────────
 @router.message(CommandStart())
 async def cmd_start(msg: Message, state: FSMContext):
+    args = msg.text.split()
+referrer_id = None
+
+if len(args) > 1:
+    try:
+        referrer_id = int(args[1])
+    except:
+        pass
+        await state.update_data(referrer_id=referrer_id)
+        
     user = await db.get_user(msg.from_user.id)
 
     if user:
