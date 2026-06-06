@@ -348,7 +348,15 @@ async def booking_room(msg: Message, state: FSMContext):
     await msg.answer("👤 Ismingizni kiriting:")
 
     await state.set_state(Booking.waiting_name)
+    )
     
+@router.message(Booking.waiting_name, F.text == "❌ Bekor qilish")
+async def cancel_booking_name(msg: Message, state: FSMContext):
+    await state.clear()
+    await msg.answer(
+        "❌ Bekor qilindi.",
+        reply_markup=main_menu()
+    )
 @router.message(Booking.waiting_name)
 async def booking_name(msg: Message, state: FSMContext):
     await state.update_data(full_name=msg.text.strip())
