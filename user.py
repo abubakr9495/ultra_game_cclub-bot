@@ -354,8 +354,6 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         data["room"],
         msg.text.strip()
     )
-        msg.from_user.id, data["full_name"], data["phone"], data["room"], msg.text.strip()
-    )
     await state.clear()
     
     await msg.answer(
