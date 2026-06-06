@@ -19,7 +19,7 @@ class BonusAdd(StatesGroup):
     waiting_amount = State()
 
 class BroadcastState(StatesGroup):
-    witing_text = state()
+    waiting_text = State()
 
 # ─── ADMIN COMMANDS ───────────────────────────────────────
 @router.message(Command("admin"))
