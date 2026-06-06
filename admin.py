@@ -38,6 +38,14 @@ async def back_to_main(msg: Message):
     if not is_admin(msg.from_user.id): return
     await msg.answer("🏠 Asosiy menyu", reply_markup=main_menu())
 
+@router.message(F.text == "📢 E'lon yuborish")
+async def send_ad(msg: Message, state: FSMContext):
+    if not is_admin(msg.from_user.id):
+        return
+
+    await msg.answer("📢 E'lon matnini yuboring:")
+    await state.set_state(BroadcastState.waiting_text)
+
 # ─── PENDING PLAYS ────────────────────────────────────────
 @router.message(F.text == "📋 Kutilayotgan o'yinlar")
 async def pending_plays(msg: Message):
