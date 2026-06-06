@@ -28,7 +28,6 @@ class Contact(StatesGroup):
 
 # ─── START / REGISTRATION ─────────────────────────────────
 @router.message(CommandStart())
-@router.message(CommandStart())
 async def cmd_start(msg: Message, state: FSMContext):
     args = msg.text.split()
 
