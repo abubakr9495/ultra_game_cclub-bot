@@ -31,7 +31,7 @@ class Contact(StatesGroup):
 async def cmd_start(msg: Message, state: FSMContext):
     user = await db.get_user(msg.from_user.id)
     if user:
-    await msg.answer_photo(
+        await msg.answer_photo(
         photo="AgACAgIAAxkBAAIJDWokGjVQYZAopjXjokFrrJIdegABMgACbhhrG7D8IUnsPI0eUCE4gQEAAwIAA3kAAzsE",
         caption=
         f"👋 Xush kelibsiz, <b>{user['full_name']}</b>\n\n"
