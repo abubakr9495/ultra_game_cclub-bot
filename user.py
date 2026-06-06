@@ -290,11 +290,6 @@ async def booking_start(msg: Message, state: FSMContext):
     )
 
     await state.set_state(Booking.waiting_room)
-    
-    @router.message(F.text == "❌ Bekor Qilish") 
-async def cancel_action(msg: Message, state: FSMContext):
-    await state.clear()
-    await msg.answer("❌ Bekor qilindi.", reply_markup=main_menu())
 
 @router.message(Booking.waiting_room)
 async def booking_room(msg: Message, state: FSMContext):
