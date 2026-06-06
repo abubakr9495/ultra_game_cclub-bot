@@ -294,26 +294,34 @@ async def booking_room(msg: Message, state: FSMContext):
     room = msg.text.strip()
 
     if room not in [
-        "Chap xona", "O'ng xona", "Zal",
-        "1", "2", "3",
-        "1️⃣ Chap xona", "2️⃣ O'ng xona", "3️⃣ Zal"
+        "Chap xona",
+        "O'ng xona",
+        "Zal",
+        "1",
+        "2",
+        "3",
+        "1️⃣ Chap xona",
+        "2️⃣ O'ng xona",
+        "3️⃣ Zal"
     ]:
-        await msg.answer("🏠 Xonani tanlang:\nChap xona\nO'ng xona\nZal")
+        await msg.answer(
+            "🏠 Xonani tanlang:\nChap xona\nO'ng xona\nZal"
+        )
         return
-        
-if room == "1️⃣ Chap xona":
-    room = "Chap xona"
 
-elif room == "2️⃣ O'ng xona":
-    room = "O'ng xona"
+    if room == "1️⃣ Chap xona":
+        room = "Chap xona"
+    elif room == "2️⃣ O'ng xona":
+        room = "O'ng xona"
+    elif room == "3️⃣ Zal":
+        room = "Zal"
 
-elif room == "3️⃣ Zal":
-    room = "Zal"
+    await state.update_data(room=room)
+
+    await msg.answer("👤 Ismingizni kiriting:")
+
+    await state.set_state(Booking.waiting_name)
     
-await state.update_data(room=room)
-await msg.answer("👤 Ismingizni kiriting:")
-await state.set_state(Booking.waiting_name)
-
 @router.message(Booking.waiting_name)
 async def booking_name(msg: Message, state: FSMContext):
     await state.update_data(full_name=msg.text.strip())
