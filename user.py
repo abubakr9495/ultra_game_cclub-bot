@@ -445,6 +445,14 @@ async def contact_start(msg: Message, state: FSMContext):
     )
     await state.set_state(Contact.waiting_name)
 
+@router.message(Contact.waiting_name, F.text == "❌ Bekor qilish")
+async def cancel_contact_name(msg: Message, state: FSMContext):
+    await state.clear()
+    await msg.answer(
+        "❌ Bekor qilindi.",
+        reply_markup=main_menu()
+    )
+                
 @router.message(Contact.waiting_name)
 async def contact_name(msg: Message, state: FSMContext):
     await state.update_data(full_name=msg.text.strip())
@@ -461,9 +469,6 @@ async def contact_phone(msg: Message, state: FSMContext):
     await state.update_data(phone=msg.text.strip())
     await msg.answer("💬 Talab yoki taklifingizni yozing:")
     await state.set_state(Contact.waiting_message)
-
-class Contact2(StatesGroup):
-    waiting_message = State()
 
 @router.message(Contact.waiting_message, F.text == "❌ Bekor qilish")
 async def cancel_contact_msg(msg: Message, state: FSMContext):
