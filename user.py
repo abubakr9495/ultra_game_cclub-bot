@@ -70,7 +70,7 @@ if len(args) > 1:
         )
         
 await state.update_data(referrer_id=referrer_id)
-        await state.set_state(Register.waiting_name)
+await state.set_state(Register.waiting_name)
 
 @router.message(Register.waiting_name)
 async def reg_name(msg: Message, state: FSMContext):
