@@ -48,17 +48,19 @@ async def cmd_start(msg: Message, state: FSMContext):
             parse_mode="HTML"
         )
 
-         await msg.answer(
+        await msg.answer(
             "👇 Asosiy menyu",
             reply_markup=main_menu()
         )
 
-    else:
+        else:
         await msg.answer(
             "🎮 <b>GameClub</b> botiga xush kelibsiz!\n\n"
             "Ro'yxatdan o'tish uchun avval ismingizni kiriting:",
             parse_mode="HTML"
         )
+
+        await state.set_state(Register.waiting_name)
 
         await state.set_state(Register.waiting_name)
     else:
