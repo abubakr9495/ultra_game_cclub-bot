@@ -43,9 +43,13 @@ async def send_ad(msg: Message, state: FSMContext):
     if not is_admin(msg.from_user.id):
         return
 
-    await msg.answer("📢 E'lon matnini yuboring:")
-    await state.set_state(BroadcastState.waiting_text)
+    await msg.answer(
+        "📢 E'lon yuboring:\n\n"
+        "📄 Matn yoki\n"
+        "📷 Rasm + matn yuborishingiz mumkin."
+    )
 
+    await state.set_state(BroadcastState.waiting_text)
 # ─── PENDING PLAYS ────────────────────────────────────────
 @router.message(F.text == "📋 Kutilayotgan o'yinlar")
 async def pending_plays(msg: Message):
@@ -308,19 +312,31 @@ async def statistics(msg: Message):
     
 @router.message(BroadcastState.waiting_text)
 async def process_broadcast(msg: Message, state: FSMContext, bot: Bot):
-    users = await db.get_all_users()
 
+    users = await db.get_all_users()
     sent = 0
 
     for user in users:
         try:
-            await bot.send_message(
-                chat_id=user["telegram_id"],
-                text=msg.text
-            )
+            if msg.photo:
+                await bot.send_photo(
+                    chat_id=user["telegram_id"],
+                    photo=msg.photo[-1].file_id,
+                    caption=msg.caption or ""
+                )
+            else:
+                await bot.send_message(
+                    chat_id=user["telegram_id"],
+                    text=msg.text
+                )
+
             sent += 1
+
         except:
             pass
 
-    await msg.answer(f"✅ E'lon {sent} ta foydalanuvchiga yuborildi")
+    await msg.answer(
+        f"✅ E'lon {sent} ta foydalanuvchiga yuborildi"
+    )
+
     await state.clear()
