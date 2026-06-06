@@ -37,7 +37,6 @@ if len(args) > 1:
         referrer_id = int(args[1])
     except:
         pass
-        await state.update_data(referrer_id=referrer_id)
         
     user = await db.get_user(msg.from_user.id)
 
@@ -69,7 +68,8 @@ if len(args) > 1:
             "Ro'yxatdan o'tish uchun avval ismingizni kiriting:",
             parse_mode="HTML"
         )
-
+        
+await state.update_data(referrer_id=referrer_id)
         await state.set_state(Register.waiting_name)
 
 @router.message(Register.waiting_name)
