@@ -305,3 +305,22 @@ async def statistics(msg: Message):
         f"💰 Jami bonuslar: <b>{total_bonus}</b>",
         parse_mode="HTML"
     )
+    
+@router.message(BroadcastState.waiting_text)
+async def process_broadcast(msg: Message, state: FSMContext, bot: Bot):
+    users = await db.get_all_users()
+
+    sent = 0
+
+    for user in users:
+        try:
+            await bot.send_message(
+                chat_id=user["telegram_id"],
+                text=msg.text
+            )
+            sent += 1
+        except:
+            pass
+
+    await msg.answer(f"✅ E'lon {sent} ta foydalanuvchiga yuborildi")
+    await state.clear()
