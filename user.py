@@ -31,11 +31,26 @@ class Contact(StatesGroup):
 async def cmd_start(msg: Message, state: FSMContext):
     user = await db.get_user(msg.from_user.id)
     if user:
-        await msg.answer(
-            f"👋 Xush kelibsiz, <b>{user['full_name']}</b>!\n\n🎮 <b>GameClub</b> botiga xush kelibsiz!",
-            parse_mode="HTML",
-            reply_markup=main_menu()
-        )
+    await msg.answer_photo(
+        photo="AgACAgIAAxkBAAIJDWokGjVQYZAopjXjokFrrJIdegABMgACbhhrG7D8IUnsPI0eUCE4gQEAAwIAA3kAAzsE",
+        caption=
+        f"👋 Xush kelibsiz, <b>{user['full_name']}</b>\n\n"
+        "🎮 <b>ULTRA GAME CLUB</b>\n\n"
+        "🔥 Kuchli Gaming PC lar\n"
+        "📅 Joy bron qilish\n"
+        "🎁 Bonus tizimi\n"
+        "🏆 Turnirlar va musobaqalar\n\n"
+        "📍 Qarshi tumani, Beshket shahri,\n"
+        "Navoiy MFY 75-uy\n\n"
+        "📞 +998996862274\n"
+        "🤖 @ultra_game_cclubbot",
+        parse_mode="HTML"
+    )
+
+    await msg.answer(
+        "👇 Asosiy menyu",
+        reply_markup=main_menu()
+    )
     else:
         await msg.answer(
             "🎮 <b>GameClub</b> botiga xush kelibsiz!\n\n"
