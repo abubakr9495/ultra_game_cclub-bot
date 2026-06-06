@@ -73,7 +73,14 @@ async def reg_name(msg: Message, state: FSMContext):
         reply_markup=share_contact_kb()
     )
     await state.set_state(Register.waiting_phone)
-
+    
+@router.message(Register.waiting_phone, F.text == "❌ Bekor qilish")
+async def cancel_register_phone(msg: Message, state: FSMContext):
+    await state.clear()
+    await msg.answer(
+        "❌ Bekor qilindi.",
+        reply_markup=main_menu()
+    )
 @router.message(Register.waiting_phone,F.contact)
 async def reg_phone_contact(msg: Message, state: FSMContext):
     if not msg.contact:
