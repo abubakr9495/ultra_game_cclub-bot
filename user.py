@@ -458,7 +458,6 @@ if busy:
         )
         return
 
- try:
     booking_id = await db.add_booking(
         msg.from_user.id,
         data["full_name"],
