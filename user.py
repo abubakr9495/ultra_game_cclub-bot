@@ -444,6 +444,12 @@ async def cancel_booking_dt(msg: Message, state: FSMContext):
 @router.message(Booking.waiting_datetime)
 async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
     data = await state.get_data()
+    
+    if msg.from_user.id in user_locks:
+    await msg.answer("⏳ Kuting, so'rov qayta ishlanmoqda...")
+    return
+
+user_locks.add(msg.from_user.id)
 
     busy = await db.is_time_busy(
         data["room"],
@@ -473,11 +479,12 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         )
 
     except Exception as e:
-        print("BOOKING ERROR:", e)
-        await msg.answer(
-            "❌ Bron saqlashda xatolik yuz berdi. Qayta urinib ko'ring."
-        )
-        return
+    user_locks.discard(msg.from_user.id)
+    print("BOOKING ERROR:", e)
+    await msg.answer(
+        "❌ Bron saqlashda xatolik yuz berdi. Qayta urinib ko'ring."
+    )
+    return
     
     await msg.answer(
     f"✅ <b>Broningiz qabul qilindi!</b>\n\n"
