@@ -553,3 +553,14 @@ async def payment_info(msg: Message):
         "👤 Karta egasi: Xalilov Feruz\n\n"
         "📸 To'lov qilgandan so'ng chek rasmini yuboring."
     )
+
+@router.message(F.text == "👥 Referal havolam")
+async def referral_link(msg: Message, bot: Bot):
+    me = await bot.get_me()
+
+    link = f"https://t.me/{me.username}?start={msg.from_user.id}"
+
+    await msg.answer(
+        f"👥 Referal havolangiz:\n\n{link}\n\n"
+        "🎁 Har bir taklif qilgan do'stingiz uchun 1000 bonus beriladi."
+    )
