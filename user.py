@@ -478,12 +478,16 @@ try:
             parse_mode="HTML"
         )
 
-    except Exception as e:
-    user_locks.discard(msg.from_user.id)
+  except Exception as e:
     print("BOOKING ERROR:", e)
+
     await msg.answer(
         "❌ Bron saqlashda xatolik yuz berdi. Qayta urinib ko'ring."
     )
+
+finally:
+    user_locks.discard(msg.from_user.id)
+
     return
     
     await msg.answer(
