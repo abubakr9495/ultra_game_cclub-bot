@@ -14,6 +14,7 @@ router = Router()
 class Register(StatesGroup):
     waiting_name = State()
     waiting_phone = State()
+    waiting_bonus = State()
 
 class Booking(StatesGroup):
     waiting_room = State()
