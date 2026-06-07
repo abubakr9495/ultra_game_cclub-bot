@@ -55,12 +55,12 @@ async def cmd_start(msg: Message, state: FSMContext):
             reply_markup=main_menu()
         )
 
-    else:
-        await msg.answer(
-            "🎮 <b>ULTRA GAME CLUB</b> botiga xush kelibsiz!\n\n"
-            "Ro'yxatdan o'tish uchun avval ismingizni kiriting:",
-            parse_mode="HTML"
-        )
+   else:
+    await msg.answer_photo(
+        photo="SIZNING_FILE_ID",
+        caption="🎮 <b>ULTRA GAME CLUB</b> botiga xush kelibsiz!\n\nRo'yxatdan o'tish uchun avval ismingizni kiriting:",
+        parse_mode="HTML"
+    )
 
         await state.update_data(referrer_id=referrer_id)
         await state.set_state(Register.waiting_name)
