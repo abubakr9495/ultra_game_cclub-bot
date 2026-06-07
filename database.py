@@ -76,8 +76,9 @@ async def get_user(telegram_id: int):
 
             return user
 
-  async def create_user(telegram_id: int, full_name: str, phone: str, referrer_id=None):
+ async def create_user(telegram_id: int, full_name: str, phone: str, referrer_id=None):
     async with aiosqlite.connect(DB_PATH) as db:
+
         await db.execute(
             "INSERT OR IGNORE INTO users (telegram_id, full_name, phone, referrer_id) VALUES (?,?,?,?)",
             (telegram_id, full_name, phone, referrer_id)
@@ -89,7 +90,7 @@ async def get_user(telegram_id: int):
         )
 
         if referrer_id and referrer_id != telegram_id:
-            await db.execute(
+               await db.execute(
                 "UPDATE bonuses SET amount = amount + 1000 WHERE user_id = ?",
                 (referrer_id,)
             )
