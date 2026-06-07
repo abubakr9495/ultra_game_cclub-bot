@@ -452,7 +452,7 @@ user_id = msg.from_user.id
 
 if user_id in user_locks:
     await msg.answer("⏳ Oldingi so'rov bajarilmoqda...")
-    return
+        return
 
 user_locks.add(user_id)
 
