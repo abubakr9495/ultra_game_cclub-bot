@@ -447,7 +447,13 @@ async def cancel_booking_dt(msg: Message, state: FSMContext):
 @router.message(Booking.waiting_datetime)
 async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
     data = await state.get_data()
-  if busy:
+
+busy = await db.is_time_busy(
+    data["room"],
+    msg.text.strip()
+)
+
+if busy:
     await msg.answer(
         "❌ Bu vaqt band!\n\nBoshqa vaqt tanlang."
     )
