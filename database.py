@@ -101,7 +101,7 @@ async def create_user(telegram_id: int, full_name: str, phone: str, referrer_id=
         )
 
         if referrer_id and referrer_id != telegram_id:
-            await db.execute(
+        await db.execute(
                 "UPDATE bonuses SET amount = amount + 1000 WHERE user_id = ?",
                 (referrer_id,)
             )
