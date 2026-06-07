@@ -239,19 +239,30 @@ async def my_bonuses(msg: Message):
 
 @router.callback_query(F.data == "use_bonus")
 async def use_bonus_request(call: CallbackQuery):
-    bonus = await db.get_bonus(call.from_user.id)
 
-    kb = InlineKeyboardMarkup(
-        inline_keyboard=[
-            [InlineKeyboardButton(text="5000", callback_data="bonus_5000")],
-            [InlineKeyboardButton(text="10000", callback_data="bonus_10000")]
-        ]
-    )
+    user_id = call.from_user.id
 
-    await call.message.answer(
-        "💰 Qancha bonus ishlatmoqchisiz?",
-        reply_markup=kb
-    )
+    if user_id in user_locks:
+        await call.answer("⏳ Kuting...", show_alert=True)
+        return
+
+    user_locks.add(user_id)
+
+    try:
+        kb = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text="5000", callback_data="bonus_5000")],
+                [InlineKeyboardButton(text="10000", callback_data="bonus_10000")]
+            ]
+        )
+
+        await call.message.answer(
+            "💰 Qancha bonus ishlatmoqchisiz?",
+            reply_markup=kb
+        )
+
+    finally:
+        user_locks.discard(user_id)
 
 @router.callback_query(F.data == "bonus_5000")
 async def bonus_5000(call: CallbackQuery, bot: Bot):
