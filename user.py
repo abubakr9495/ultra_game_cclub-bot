@@ -41,7 +41,7 @@ async def cmd_start(msg: Message, state: FSMContext):
 
     user = await db.get_user(msg.from_user.id)
 
-  if user:
+    if user:
         await msg.answer_photo(
             photo="AgACAgIAAxkBAAILtWolP-ueaAABojXVaEXX_0QsNMkLewACVxxrG7D8KUmVcxHpjuRDUwEAAwIAA3kAAzsE",
             caption=
