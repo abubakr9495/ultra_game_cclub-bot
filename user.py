@@ -294,9 +294,10 @@ async def bonus_use_approve(call: CallbackQuery, bot: Bot):
     parts = call.data.split(":")
     user_id = int(parts[1])
     bonus = int(parts[2])
-    
-   current_bonus = await db.get_bonus(user_id)
-await db.set_bonus(user_id, current_bonus - bonus)
+
+    current_bonus = await db.get_bonus(user_id)
+    await db.set_bonus(user_id, current_bonus - bonus)
+
     await call.message.edit_text(
         f"✅ <b>Bonus ishlatish tasdiqlandi!</b>\n💰 {bonus} bonus ayirildi.",
         parse_mode="HTML"
