@@ -41,41 +41,29 @@ async def cmd_start(msg: Message, state: FSMContext):
 
     user = await db.get_user(msg.from_user.id)
 
-    if user:
-        await msg.answer_photo(
-            photo="AgACAgIAAxkBAAILtWolP-ueaAABojXVaEXX_0QsNMkLewACVxxrG7D8KUmVcxHpjuRDUwEAAwIAA3kAAzsE",
-            caption=
-            f"👋 Xush kelibsiz, <b>{user['full_name']}</b>\n\n"
-            "🎮 <b>ULTRA GAME CLUB</b>\n\n",
-            parse_mode="HTML"
-        )
+   if user:
+    await msg.answer_photo(
+        photo="AgACAgIAAxkBAAILtWolP-ueaAABojXVaEXX_0QsNMkLewACVxxrG7D8KUmVcxHpjuRDUwEAAwIAA3kAAzsE",
+        caption=
+        f"👋 Xush kelibsiz, <b>{user['full_name']}</b>\n\n"
+        "🎮 <b>ULTRA GAME CLUB</b>\n\n",
+        parse_mode="HTML"
+    )
 
-        await msg.answer(
-            "👇 Asosiy menyu",
-            reply_markup=main_menu()
-        )
+    await msg.answer(
+        "👇 Asosiy menyu",
+        reply_markup=main_menu()
+    )
 
-   else:
+else:
     await msg.answer_photo(
         photo="SIZNING_FILE_ID",
         caption="🎮 <b>ULTRA GAME CLUB</b> botiga xush kelibsiz!\n\nRo'yxatdan o'tish uchun avval ismingizni kiriting:",
         parse_mode="HTML"
     )
 
-        await state.update_data(referrer_id=referrer_id)
-        await state.set_state(Register.waiting_name)
-        
-@router.message(Register.waiting_name)
-async def reg_name(msg: Message, state: FSMContext):
-    if len(msg.text.strip()) < 2:
-        await msg.answer("❌ Ism juda qisqa. Qaytadan kiriting:")
-        return
-    await state.update_data(full_name=msg.text.strip())
-    await msg.answer(
-        "📱 Telefon raqamingizni yuboring:",
-        reply_markup=share_contact_kb()
-    )
-    await state.set_state(Register.waiting_phone)
+    await state.update_data(referrer_id=referrer_id)
+    await state.set_state(Register.waiting_name)
     
 @router.message(Register.waiting_phone, F.text == "❌ Bekor qilish")
 async def cancel_register_phone(msg: Message, state: FSMContext):
@@ -85,6 +73,7 @@ async def cancel_register_phone(msg: Message, state: FSMContext):
         reply_markup=main_menu()
     )
 @router.message(Register.waiting_phone,F.contact)
+    
 async def reg_phone_contact(msg: Message, state: FSMContext):
     if not msg.contact:
         await msg.answer(
