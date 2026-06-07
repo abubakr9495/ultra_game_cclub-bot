@@ -13,6 +13,7 @@ def main_menu():
 [KeyboardButton(text="👤 Profil"),
  KeyboardButton(text="📅 Joy bron qilish")],
 
+[KeyboardButton(text="💳 Hisobni to'ldirish"),
 [KeyboardButton(text="📨 Murojat uchun")],
         ],
         resize_keyboard=True
