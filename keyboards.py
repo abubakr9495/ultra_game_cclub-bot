@@ -14,7 +14,7 @@ def main_menu():
  KeyboardButton(text="📅 Joy bron qilish")],
 
 [KeyboardButton(text="💳 Hisobni to'ldirish"),
-[KeyboardButton(text="📨 Murojat uchun")],
+ KeyboardButton(text="📨 Murojat uchun")],
         ],
         resize_keyboard=True
     )
