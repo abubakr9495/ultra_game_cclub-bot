@@ -448,6 +448,16 @@ async def cancel_booking_dt(msg: Message, state: FSMContext):
 async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
     data = await state.get_data()
 
+user_id = msg.from_user.id
+
+if user_id in user_locks:
+    await msg.answer("⏳ Oldingi so'rov bajarilmoqda...")
+    return
+
+user_locks.add(user_id)
+
+try:
+    
     busy = await db.is_time_busy(
         data["room"],
         msg.text.strip()
@@ -490,7 +500,9 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         parse_mode="HTML",
         reply_markup=booking_action_kb(booking_id)
     )
-
+finally:
+        user_locks.discard(user_id)
+    
 # ─── PANEL 4: MUROJAT ─────────────────────────────────────
 @router.message(F.text == "📨 Murojat uchun")
 async def contact_start(msg: Message, state: FSMContext):
