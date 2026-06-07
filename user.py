@@ -543,3 +543,13 @@ async def contact_message(msg: Message, state: FSMContext, bot: Bot):
 @router.message(F.photo)
 async def get_file_id(msg: Message):
     await msg.answer(msg.photo[-1].file_id)
+
+@router.message(F.text == "💳 Hisobni to'ldirish")
+async def payment_info(msg: Message):
+    await msg.answer(
+        "💳 To'lov uchun kartalar\n\n"
+        "🏦 Uzcard:\n"
+        "5614 6827 1546 0525\n\n"
+        "👤 Karta egasi: Xalilov Feruz\n\n"
+        "📸 To'lov qilgandan so'ng chek rasmini yuboring."
+    )
