@@ -294,7 +294,8 @@ async def bonus_use_approve(call: CallbackQuery, bot: Bot):
     parts = call.data.split(":")
     user_id = int(parts[1])
     bonus = int(parts[2])
-    await db.set_bonus(user_id, 0)
+   current_bonus = await db.get_bonus(user_id)
+await db.set_bonus(user_id, current_bonus - bonus)
     await call.message.edit_text(
         f"✅ <b>Bonus ishlatish tasdiqlandi!</b>\n💰 {bonus} bonus ayirildi.",
         parse_mode="HTML"
@@ -303,7 +304,7 @@ async def bonus_use_approve(call: CallbackQuery, bot: Bot):
     try:
         await bot.send_message(
             user_id,
-            f"✅ <b>{bonus} bonusingiz muvaffaqiyatli ishlatildi!</b>\n\n💰 Joriy bonuslar: 0",
+            f"✅ <b>{bonus} bonusingiz muvaffaqiyatli ishlatildi!</b>\n\n💰 Joriy bonuslar: {current_bonus - bonus}"
             parse_mode="HTML"
         )
     except Exception:
