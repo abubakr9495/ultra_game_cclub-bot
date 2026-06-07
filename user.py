@@ -43,7 +43,7 @@ async def cmd_start(msg: Message, state: FSMContext):
 
     if user:
         await msg.answer_photo(
-            photo="AgACAgIAAxkBAAIJ...",
+            photo="AgACAgIAAxkBAAILtWolP-ueaAABojXVaEXX_0QsNMkLewACVxxrG7D8KUmVcxHpjuRDUwEAAwIAA3kAAzsE",
             caption=
             f"👋 Xush kelibsiz, <b>{user['full_name']}</b>\n\n"
             "🎮 <b>ULTRA GAME CLUB</b>\n\n",
