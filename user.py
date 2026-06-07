@@ -38,28 +38,31 @@ async def cmd_start(msg: Message, state: FSMContext):
             referrer_id = int(args[1])
         except:
             pass
+            
+if user:
+    await msg.answer_photo(
+        photo="AgACAgIAAxkBAAILtWo1P-ueaAABojXVaEXX_0QsNMkLewACVxxrG7D8KUmVcxHpjuRDUwEAAwIAA3kAAzsE",
+        caption=
+        f"👋 Xush kelibsiz, <b>{user['full_name']}</b>\n\n"
+        "🎮 <b>ULTRA GAME CLUB</b>\n\n",
+        parse_mode="HTML"
+    )
 
-    user = await db.get_user(msg.from_user.id)
-
-    if user:
-        await msg.answer_photo(
-            photo="AgACAgIAAxkBAAILtWolP-ueaAABojXVaEXX_0QsNMkLewACVxxrG7D8KUmVcxHpjuRDUwEAAwIAA3kAAzsE",
-            caption=
-            f"👋 Xush kelibsiz, <b>{user['full_name']}</b>\n\n"
-            "🎮 <b>ULTRA GAME CLUB</b>\n\n",
-            parse_mode="HTML"
-        )
+    await msg.answer(
+        "👇 Asosiy menyu",
+        reply_markup=main_menu()
+    )
 
 else:
     await msg.answer_photo(
-        photo="BU_YERGA_YANGI_FILE_ID",
+        photo="AgACAgIAAxkBAAILtWo1P-ueaAABojXVaEXX_0QsNMkLewACVxxrG7D8KUmVcxHpjuRDUwEAAwIAA3kAAzsE",
         caption="🎮 <b>ULTRA GAME CLUB</b> botiga xush kelibsiz!\n\nRo'yxatdan o'tish uchun avval ismingizni kiriting:",
         parse_mode="HTML"
     )
 
     await state.update_data(referrer_id=referrer_id)
     await state.set_state(Register.waiting_name)
-
+    
     await msg.answer(
             "👇 Asosiy menyu",
             reply_markup=main_menu()
