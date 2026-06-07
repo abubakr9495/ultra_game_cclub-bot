@@ -458,6 +458,7 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         )
         return
 
+ try:
     booking_id = await db.add_booking(
         msg.from_user.id,
         data["full_name"],
@@ -465,6 +466,11 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         data["room"],
         msg.text.strip()
     )
+except Exception as e:
+    print("BOOKING ERROR:", e)
+    await msg.answer("❌ Bron saqlashda xatolik yuz berdi. Qayta urinib ko'ring.")
+    return
+    
     await state.clear()
     
     await msg.answer(
