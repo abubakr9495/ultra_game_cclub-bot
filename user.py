@@ -9,6 +9,8 @@ import database as db
 from keyboards import main_menu, share_contact_kb, cancel_kb
 from config import ADMIN_ID, CONTACT_PHONE
 
+user_locks = set()
+
 router = Router()
 
 # ─── STATES ───────────────────────────────────────────────
