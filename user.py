@@ -447,17 +447,6 @@ async def cancel_booking_dt(msg: Message, state: FSMContext):
 @router.message(Booking.waiting_datetime)
 async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
     data = await state.get_data()
-
-user_id = msg.from_user.id
-
-if user_id in user_locks:
-    await msg.answer("⏳ Oldingi so'rov bajarilmoqda...")
-        return
-
-user_locks.add(user_id)
-
-try:
-    
     busy = await db.is_time_busy(
         data["room"],
         msg.text.strip()
