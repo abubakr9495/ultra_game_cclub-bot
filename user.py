@@ -489,8 +489,6 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         parse_mode="HTML",
         reply_markup=booking_action_kb(booking_id)
     )
-finally:
-        user_locks.discard(user_id)
     
 # ─── PANEL 4: MUROJAT ─────────────────────────────────────
 @router.message(F.text == "📨 Murojat uchun")
