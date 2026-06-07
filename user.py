@@ -239,6 +239,56 @@ async def use_bonus_request(call: CallbackQuery):
         reply_markup=kb
     )
 
+@router.callback_query(F.data == "bonus_5000")
+async def bonus_5000(call: CallbackQuery, bot: Bot):
+    user = await db.get_user(call.from_user.id)
+
+    kb = InlineKeyboardMarkup(
+        inline_keyboard=[[
+            InlineKeyboardButton(
+                text="✅ Tasdiqlash",
+                callback_data=f"bonus_use_approve:{call.from_user.id}:5000"
+            ),
+            InlineKeyboardButton(
+                text="❌ Rad etish",
+                callback_data=f"bonus_use_reject:{call.from_user.id}"
+            )
+        ]]
+    )
+
+    await bot.send_message(
+        ADMIN_ID,
+        f"💰 Bonus ishlatish so'rovi\n\n👤 {user['full_name']}\n🪙 Bonus: 5000",
+        reply_markup=kb
+    )
+
+    await call.answer("✅ So'rov yuborildi")
+
+@router.callback_query(F.data == "bonus_10000")
+async def bonus_10000(call: CallbackQuery, bot: Bot):
+    user = await db.get_user(call.from_user.id)
+
+    kb = InlineKeyboardMarkup(
+        inline_keyboard=[[
+            InlineKeyboardButton(
+                text="✅ Tasdiqlash",
+                callback_data=f"bonus_use_approve:{call.from_user.id}:10000"
+            ),
+            InlineKeyboardButton(
+                text="❌ Rad etish",
+                callback_data=f"bonus_use_reject:{call.from_user.id}"
+            )
+        ]]
+    )
+
+    await bot.send_message(
+        ADMIN_ID,
+        f"💰 Bonus ishlatish so'rovi\n\n👤 {user['full_name']}\n🪙 Bonus: 10000",
+        reply_markup=kb
+    )
+
+    await call.answer("✅ So'rov yuborildi")
+
 @router.callback_query(F.data.startswith("bonus_use_approve:"))
 async def bonus_use_approve(call: CallbackQuery, bot: Bot):
     parts = call.data.split(":")
