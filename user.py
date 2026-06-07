@@ -305,14 +305,13 @@ async def bonus_use_approve(call: CallbackQuery, bot: Bot):
 
     await call.answer("✅ Tasdiqlandi!")
     try:
-        await bot.send_message(
-            user_id,
-            f"✅ <b>{bonus} bonusingiz muvaffaqiyatli ishlatildi!</b>\n\n💰 Joriy bonuslar: {current_bonus - bonus}"
-            parse_mode="HTML"
-        )
+       await bot.send_message(
+    user_id,
+    f"✅ <b>{bonus} bonusingiz muvaffaqiyatli ishlatildi!</b>\n\n💰 Joriy bonuslar: {current_bonus - bonus}",
+    parse_mode="HTML"
+)
     except Exception:
         pass
-
 @router.callback_query(F.data.startswith("bonus_use_reject:"))
 async def bonus_use_reject(call: CallbackQuery, bot: Bot):
     user_id = int(call.data.split(":")[1])
