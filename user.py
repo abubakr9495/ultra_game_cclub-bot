@@ -587,7 +587,10 @@ async def referral_link(msg: Message, bot: Bot):
 
     link = f"https://t.me/{me.username}?start={msg.from_user.id}"
 
+    referal_count = await db.get_referral_count(msg.from_user.id)
+
     await msg.answer(
         f"👥 Referal havolangiz:\n\n{link}\n\n"
-        "🎁 Har bir taklif qilgan do'stingiz uchun 1000 bonus beriladi."
+        f"👤 Taklif qilgan do'stlaringiz: {referal_count} ta\n"
+        f"🎁 Har bir taklif uchun 1000 bonus beriladi."
     )
