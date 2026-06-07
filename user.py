@@ -66,8 +66,8 @@ async def cmd_start(msg: Message, state: FSMContext):
         await state.update_data(referrer_id=referrer_id)
         await state.set_state(Register.waiting_name)
         
-        @router.message(Register.waiting_name)
-async def reg_name(msg: Message, state: FSMContext):
+   @router.message(Register.waiting_name)
+   async def reg_name(msg: Message, state: FSMContext):
     await state.update_data(full_name=msg.text)
 
     await msg.answer(
@@ -76,7 +76,7 @@ async def reg_name(msg: Message, state: FSMContext):
     )
 
     await state.set_state(Register.waiting_phone)
-    
+       
 @router.message(Register.waiting_phone, F.text == "❌ Bekor qilish")
 async def cancel_register_phone(msg: Message, state: FSMContext):
     await state.clear()
