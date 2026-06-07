@@ -224,32 +224,18 @@ async def my_bonuses(msg: Message):
     )
 
 @router.callback_query(F.data == "use_bonus")
-async def use_bonus_request(call: CallbackQuery, bot: Bot):
-    user = await db.get_user(call.from_user.id)
+async def use_bonus_request(call: CallbackQuery):
     bonus = await db.get_bonus(call.from_user.id)
-    if bonus <= 0:
-        await call.answer("❌ Bonusingiz yo'q!", show_alert=True)
-        return
-    await call.answer("✅ So'rovingiz adminga yuborildi!", show_alert=True)
-    await call.message.edit_text(
-        f"🎁 <b>Mening bonuslarim</b>\n\n"
-        f"💰 Joriy bonuslar: <b>{bonus}</b>\n\n"
-        f"⏳ Bonus ishlatish so'rovi adminga yuborildi...",
-        parse_mode="HTML"
+
+    kb = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="5000", callback_data="bonus_5000")],
+            [InlineKeyboardButton(text="10000", callback_data="bonus_10000")]
+        ]
     )
-    from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-    kb = InlineKeyboardMarkup(inline_keyboard=[[
-        InlineKeyboardButton(text="✅ Tasdiqlash", callback_data=f"bonus_use_approve:{call.from_user.id}:{bonus}"),
-        InlineKeyboardButton(text="❌ Rad etish", callback_data=f"bonus_use_reject:{call.from_user.id}"),
-    ]])
-    await bot.send_message(
-        ADMIN_ID,
-        f"💳 <b>Bonus ishlatish so'rovi</b>\n\n"
-        f"👤 Ism: {user['full_name']}\n"
-        f"📱 Tel: {user['phone']}\n"
-        f"💰 Bonus: <b>{bonus}</b>\n"
-        f"🆔 ID: {call.from_user.id}",
-        parse_mode="HTML",
+
+    await call.message.answer(
+        "💰 Qancha bonus ishlatmoqchisiz?",
         reply_markup=kb
     )
 
