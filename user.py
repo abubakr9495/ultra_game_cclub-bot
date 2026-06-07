@@ -448,38 +448,39 @@ async def cancel_booking_dt(msg: Message, state: FSMContext):
 async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
     data = await state.get_data()
 
-busy = await db.is_time_busy(
-    data["room"],
-    msg.text.strip()
-)
-
-if busy:
-    await msg.answer(
-        "❌ Bu vaqt band!\n\nBoshqa vaqt tanlang."
-    )
-    return
-
-try:
-    booking_id = await db.add_booking(
-        msg.from_user.id,
-        data["full_name"],
-        data["phone"],
+    busy = await db.is_time_busy(
         data["room"],
         msg.text.strip()
     )
 
-    await state.clear()
+    if busy:
+        await msg.answer(
+            "❌ Bu vaqt band!\n\nBoshqa vaqt tanlang."
+        )
+        return
 
-    await msg.answer(
-        f"✅ <b>Broningiz qabul qilindi!</b>\n\n"
-    )
+    try:
+        booking_id = await db.add_booking(
+            msg.from_user.id,
+            data["full_name"],
+            data["phone"],
+            data["room"],
+            msg.text.strip()
+        )
 
-except Exception as e:
-    print("BOOKING ERROR:", e)
-    await msg.answer(
-        "❌ Bron saqlashda xatolik yuz berdi. Qayta urinib ko'ring."
-    )
-    return
+        await state.clear()
+
+        await msg.answer(
+            f"✅ <b>Broningiz qabul qilindi!</b>\n\n",
+            parse_mode="HTML"
+        )
+
+    except Exception as e:
+        print("BOOKING ERROR:", e)
+        await msg.answer(
+            "❌ Bron saqlashda xatolik yuz berdi. Qayta urinib ko'ring."
+        )
+        return
     
     await msg.answer(
     f"✅ <b>Broningiz qabul qilindi!</b>\n\n"
