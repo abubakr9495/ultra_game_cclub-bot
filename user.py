@@ -460,20 +460,19 @@ if busy:
     return
 
 try:
-  booking_id = await db.add_booking(
-    msg.from_user.id,
-    data["full_name"],
-    data["phone"],
-    data["room"],
-    msg.text.strip()
-)
+    booking_id = await db.add_booking(
+        msg.from_user.id,
+        data["full_name"],
+        data["phone"],
+        data["room"],
+        msg.text.strip()
+    )
 
-await state.clear()
+    await state.clear()
 
-await msg.answer(
-    f"✅ <b>Broningiz qabul qilindi!</b>\n\n"
-    ...
-)
+    await msg.answer(
+        f"✅ <b>Broningiz qabul qilindi!</b>\n\n"
+    )
 
 except Exception as e:
     print("BOOKING ERROR:", e)
@@ -481,8 +480,6 @@ except Exception as e:
         "❌ Bron saqlashda xatolik yuz berdi. Qayta urinib ko'ring."
     )
     return
-    
-    await state.clear()
     
     await msg.answer(
     f"✅ <b>Broningiz qabul qilindi!</b>\n\n"
