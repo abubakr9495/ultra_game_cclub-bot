@@ -97,7 +97,7 @@ async def create_user(telegram_id: int, full_name: str, phone: str, referrer_id=
 
         await db.commit()
         
-        async def get_referral_count(user_id: int):
+       async def get_referral_count(user_id: int):
     async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute(
             "SELECT COUNT(*) FROM users WHERE referrer_id=?",
