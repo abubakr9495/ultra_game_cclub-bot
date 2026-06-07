@@ -3,6 +3,7 @@ from aiogram.types import (Message, CallbackQuery, ReplyKeyboardMarkup, Keyboard
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.filters import CommandStart
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 import database as db
 from keyboards import main_menu, share_contact_kb, cancel_kb
