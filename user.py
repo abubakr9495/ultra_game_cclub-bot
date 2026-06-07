@@ -50,11 +50,6 @@ async def cmd_start(msg: Message, state: FSMContext):
             parse_mode="HTML"
         )
 
-        await msg.answer(
-            "👇 Asosiy menyu",
-            reply_markup=main_menu()
-        )
-
 else:
     await msg.answer_photo(
         photo="BU_YERGA_YANGI_FILE_ID",
@@ -64,6 +59,11 @@ else:
 
     await state.update_data(referrer_id=referrer_id)
     await state.set_state(Register.waiting_name)
+
+    await msg.answer(
+            "👇 Asosiy menyu",
+            reply_markup=main_menu()
+        )
         
 @router.message(Register.waiting_phone, F.text == "❌ Bekor qilish")
 async def cancel_register_phone(msg: Message, state: FSMContext):
