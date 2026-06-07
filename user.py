@@ -41,29 +41,31 @@ async def cmd_start(msg: Message, state: FSMContext):
 
     user = await db.get_user(msg.from_user.id)
 
-   if user:
-    await msg.answer_photo(
-        photo="AgACAgIAAxkBAAILtWolP-ueaAABojXVaEXX_0QsNMkLewACVxxrG7D8KUmVcxHpjuRDUwEAAwIAA3kAAzsE",
-        caption=
-        f"👋 Xush kelibsiz, <b>{user['full_name']}</b>\n\n"
-        "🎮 <b>ULTRA GAME CLUB</b>\n\n",
-        parse_mode="HTML"
-    )
+  if user:
+        await msg.answer_photo(
+            photo="AgACAgIAAxkBAAILtWolP-ueaAABojXVaEXX_0QsNMkLewACVxxrG7D8KUmVcxHpjuRDUwEAAwIAA3kAAzsE",
+            caption=
+            f"👋 Xush kelibsiz, <b>{user['full_name']}</b>\n\n"
+            "🎮 <b>ULTRA GAME CLUB</b>\n\n",
+            parse_mode="HTML"
+        )
 
-    await msg.answer(
-        "👇 Asosiy menyu",
-        reply_markup=main_menu()
-    )
+        await msg.answer(
+            "👇 Asosiy menyu",
+            reply_markup=main_menu()
+        )
 
 else:
     await msg.answer_photo(
-        photo="SIZNING_FILE_ID",
+        photo="BU_YERGA_YANGI_FILE_ID",
         caption="🎮 <b>ULTRA GAME CLUB</b> botiga xush kelibsiz!\n\nRo'yxatdan o'tish uchun avval ismingizni kiriting:",
         parse_mode="HTML"
     )
 
     await state.update_data(referrer_id=referrer_id)
     await state.set_state(Register.waiting_name)
+        await state.update_data(referrer_id=referrer_id)
+        await state.set_state(Register.waiting_name)
     
 @router.message(Register.waiting_phone, F.text == "❌ Bekor qilish")
 async def cancel_register_phone(msg: Message, state: FSMContext):
