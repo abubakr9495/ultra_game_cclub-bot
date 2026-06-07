@@ -452,7 +452,7 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         msg.text.strip()
     )
 
-    if busy:
+if busy:
         await msg.answer(
             "❌ Bu vaqt band!\n\nBoshqa vaqt tanlang."
         )
