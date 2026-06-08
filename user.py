@@ -477,6 +477,17 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         parse_mode="HTML"
     )
 
+await bot.send_message(
+        ADMIN_ID,
+        f"📋 <b>Yangi bron so'rovi #{booking_id}</b>\n\n"
+        f"👤 Ism: {data['full_name']}\n"
+        f"📱 Tel: {data['phone']}\n"
+        f"📅 Vaqt: {msg.text.strip()}\n"
+        f"🆔 User ID: {msg.from_user.id}",
+        parse_mode="HTML",
+        reply_markup=booking_action_kb(booking_id)
+    )
+
 except Exception as e:
     print("BOOKING ERROR:", e)
 
@@ -486,28 +497,6 @@ except Exception as e:
 
 finally:
     user_locks.discard(msg.from_user.id)
-
-        await bot.send_message(
-            ADMIN_ID,
-            f"📅 <b>Yangi bron so'rovi #{booking_id}</b>\n\n"
-            f"👤 Ism: {data['full_name']}\n"
-            f"📱 Tel: {data['phone']}\n"
-            f"📆 Vaqt: {msg.text.strip()}\n"
-            f"🆔 User ID: {msg.from_user.id}",
-            parse_mode="HTML",
-            reply_markup=booking_action_kb(booking_id)
-        )
-
-    except Exception as e:
-        print("BOOKING ERROR:", e)
-
-        await msg.answer(
-            "❌ Bron saqlashda xatolik yuz berdi. Qayta urinib ko'ring."
-        )
-
-    finally:
-        
-        user_locks.discard(msg.from_user.id)
         
 # ─── PANEL 4: MUROJAT ─────────────────────────────────────
 @router.message(F.text == "📨 Murojat uchun")
