@@ -462,17 +462,18 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         )
         return
 
-    try:
-        booking_id = await db.add_booking(
-            msg.from_user.id,
-            data["full_name"],
-            data["phone"],
-            data["room"],
-            msg.text.strip()
-        )
+   try:
+    booking_id = await db.add_booking(
+        msg.from_user.id,
+        data["full_name"],
+        data["phone"],
+        data["room"],
+        msg.text.strip()
+    )
 
-        await state.clear()
-        await msg.answer(
+    await state.clear()
+
+    await msg.answer(
         f"✅ <b>Broningiz qabul qilindi!</b>\n\n",
         parse_mode="HTML"
     )
@@ -494,7 +495,7 @@ except Exception as e:
     await msg.answer(
         "❌ Bron saqlashda xatolik yuz berdi. Qayta urinib ko'ring."
     )
-
+    
 finally:
     user_locks.discard(msg.from_user.id)
         
