@@ -456,13 +456,13 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         msg.text.strip()
     )
 
-    if busy:
-        await msg.answer(
-            "❌ Bu vaqt band!\n\nBoshqa vaqt tanlang."
-        )
-        return
+   if busy:
+    await msg.answer(
+        "❌ Bu vaqt band!\n\nBoshqa vaqt tanlang."
+    )
+    return
 
-   try:
+try:
     booking_id = await db.add_booking(
         msg.from_user.id,
         data["full_name"],
@@ -470,7 +470,7 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         data["room"],
         msg.text.strip()
     )
-
+    
     await state.clear()
 
     await msg.answer(
