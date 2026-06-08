@@ -483,7 +483,6 @@ data["full_name"],
 data["phone"],
 data["room"],
 msg.text.strip()
-)
 
 await state.clear()
 
