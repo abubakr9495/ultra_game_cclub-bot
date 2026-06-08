@@ -478,7 +478,7 @@ try:
             parse_mode="HTML"
         )
 
-  except Exception as e:
+except Exception as e:
     print("BOOKING ERROR:", e)
 
     await msg.answer(
