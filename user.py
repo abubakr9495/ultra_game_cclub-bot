@@ -478,10 +478,6 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
             parse_mode="HTML"
         )
 
-@router.message(Booking.waiting_datetime)
-async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
-    data = await state.get_data()
-
     if msg.from_user.id in user_locks:
         await msg.answer("⏳ Kuting, so'rov qayta ishlanmoqda...")
         return
