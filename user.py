@@ -446,7 +446,7 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
     data = await state.get_data()
     
 if msg.from_user.id in user_locks:
-    await msg.answer("⏳ Kuting, so'rov qayta ishlanmoqda...")
+await msg.answer("⏳ Kuting, so'rov qayta ishlanmoqda...")
     return
 
 user_locks.add(msg.from_user.id)
