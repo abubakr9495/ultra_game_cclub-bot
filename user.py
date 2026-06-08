@@ -444,7 +444,7 @@ async def cancel_booking_dt(msg: Message, state: FSMContext):
 @router.message(Booking.waiting_datetime)
 async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
     data = await state.get_data()
-
+    
     if msg.from_user.id in user_locks:
         await msg.answer("⏳ Kuting, so'rov qayta ishlanmoqda...")
         return
@@ -456,23 +456,22 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         msg.text.strip()
     )
 
-   if busy:
-    await msg.answer(
-        "❌ Bu vaqt band!\n\nBoshqa vaqt tanlang."
-    )
-    return
-       
-   try:
-    booking_id = await db.add_booking(
-        msg.from_user.id,
-        data["full_name"],
-        data["phone"],
-        data["room"],
-        msg.text.strip()
-    )
+    if busy:
+        await msg.answer(
+            "❌ Bu vaqt band!\n\nBoshqa vaqt tanlang."
+        )
+        return
 
-    await state.clear()
+    try:
+        booking_id = await db.add_booking(
+            msg.from_user.id,
+            data["full_name"],
+            data["phone"],
+            data["room"],
+            msg.text.strip()
+        )
 
+        await state.clear()
     await msg.answer(
         f"✅ <b>Broningiz qabul qilindi!</b>\n\n",
         parse_mode="HTML"
