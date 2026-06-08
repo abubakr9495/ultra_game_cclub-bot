@@ -463,7 +463,7 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         return
 
     try:
-       booking_id = await db.add_booking(
+    booking_id = await db.add_booking(
         msg.from_user.id,
         data["full_name"],
         data["phone"],
@@ -471,9 +471,9 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         msg.text.strip()
     )
 
-        await state.clear()
+    await state.clear()
 
-        await msg.answer(
+    await msg.answer(
         f"✅ <b>Broningiz qabul qilindi!</b>\n\n",
         parse_mode="HTML"
     )
@@ -495,10 +495,10 @@ except Exception as e:
     await msg.answer(
         "❌ Bron saqlashda xatolik yuz berdi. Qayta urinib ko'ring."
     )
-    
+
 finally:
     user_locks.discard(msg.from_user.id)
-        
+    
 # ─── PANEL 4: MUROJAT ─────────────────────────────────────
 @router.message(F.text == "📨 Murojat uchun")
 async def contact_start(msg: Message, state: FSMContext):
