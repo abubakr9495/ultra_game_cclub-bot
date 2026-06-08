@@ -472,7 +472,7 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         )
 
         await state.clear()
-    await msg.answer(
+        await msg.answer(
         f"✅ <b>Broningiz qabul qilindi!</b>\n\n",
         parse_mode="HTML"
     )
