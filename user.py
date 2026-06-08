@@ -457,10 +457,10 @@ busy = await db.is_time_busy(
     )
 
 if busy:
-       await msg.answer(
-            "❌ Bu vaqt band!\n\nBoshqa vaqt tanlang."
-        )
-        return
+    await msg.answer(
+        "❌ Bu vaqt band!\n\nBoshqa vaqt tanlang."
+    )
+    return
 
 try:
         booking_id = await db.add_booking(
