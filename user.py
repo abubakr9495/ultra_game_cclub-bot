@@ -478,41 +478,73 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
             parse_mode="HTML"
         )
 
-except Exception as e:
-    print("BOOKING ERROR:", e)
+@router.message(Booking.waiting_datetime)
+async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
+    data = await state.get_data()
 
-    await msg.answer(
-        "❌ Bron saqlashda xatolik yuz berdi. Qayta urinib ko'ring."
+    if msg.from_user.id in user_locks:
+        await msg.answer("⏳ Kuting, so'rov qayta ishlanmoqda...")
+        return
+
+    user_locks.add(msg.from_user.id)
+
+    busy = await db.is_time_busy(
+        data["room"],
+        msg.text.strip()
     )
 
-finally:
-    user_locks.discard(msg.from_user.id)
+    if busy:
+        await msg.answer(
+            "❌ Bu vaqt band!\n\nBoshqa vaqt tanlang."
+        )
+        return
 
-    return
-    
-    await msg.answer(
-    f"✅ <b>Broningiz qabul qilindi!</b>\n\n"
-    f"🏠 Xona: {data['room']}\n"
-    f"👤 Ism: {data['full_name']}\n"
-    f"📱 Tel: {data['phone']}\n"
-    f"📅 Vaqt: {msg.text.strip()}\n\n"
-    f"⏳ <b>Hurmatli mijoz, sizga 5-10 daqiqa ichida javob kelmasa,\n"
-    f"quyidagi raqamga murojaat qiling:</b>\n📞 {CONTACT_PHONE}",
-    parse_mode="HTML",
-    reply_markup=main_menu()
-    )
-    from keyboards import booking_action_kb
-    await bot.send_message(
-        ADMIN_ID,
-        f"📅 <b>Yangi bron so'rovi #{booking_id}</b>\n\n"
-        f"👤 Ism: {data['full_name']}\n"
-        f"📱 Tel: {data['phone']}\n"
-        f"📆 Vaqt: {msg.text.strip()}\n"
-        f"🆔 User ID: {msg.from_user.id}",
-        parse_mode="HTML",
-        reply_markup=booking_action_kb(booking_id)
-    )
-    
+    try:
+        booking_id = await db.add_booking(
+            msg.from_user.id,
+            data["full_name"],
+            data["phone"],
+            data["room"],
+            msg.text.strip()
+        )
+
+        await state.clear()
+
+        await msg.answer(
+            f"✅ <b>Broningiz qabul qilindi!</b>\n\n"
+            f"🏠 Xona: {data['room']}\n"
+            f"👤 Ism: {data['full_name']}\n"
+            f"📱 Tel: {data['phone']}\n"
+            f"📅 Vaqt: {msg.text.strip()}\n\n"
+            f"📞 {CONTACT_PHONE}",
+            parse_mode="HTML",
+            reply_markup=main_menu()
+        )
+
+        from keyboards import booking_action_kb
+
+        await bot.send_message(
+            ADMIN_ID,
+            f"📅 <b>Yangi bron so'rovi #{booking_id}</b>\n\n"
+            f"👤 Ism: {data['full_name']}\n"
+            f"📱 Tel: {data['phone']}\n"
+            f"📆 Vaqt: {msg.text.strip()}\n"
+            f"🆔 User ID: {msg.from_user.id}",
+            parse_mode="HTML",
+            reply_markup=booking_action_kb(booking_id)
+        )
+
+    except Exception as e:
+        print("BOOKING ERROR:", e)
+
+        await msg.answer(
+            "❌ Bron saqlashda xatolik yuz berdi. Qayta urinib ko'ring."
+        )
+
+    finally:
+        
+        user_locks.discard(msg.from_user.id)
+        
 # ─── PANEL 4: MUROJAT ─────────────────────────────────────
 @router.message(F.text == "📨 Murojat uchun")
 async def contact_start(msg: Message, state: FSMContext):
