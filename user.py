@@ -462,46 +462,31 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         )
         return
 
-    try:
-        booking_id = await db.add_booking(
-            msg.from_user.id,
-            data["full_name"],
-            data["phone"],
-            data["room"],
-            msg.text.strip()
-        )
+   try:
+    booking_id = await db.add_booking(
+        msg.from_user.id,
+        data["full_name"],
+        data["phone"],
+        data["room"],
+        msg.text.strip()
+    )
 
-        await state.clear()
+    await state.clear()
 
-        await msg.answer(
-            f"✅ <b>Broningiz qabul qilindi!</b>\n\n",
-            parse_mode="HTML"
-        )
-        
-msg.from_user.id,
-data["full_name"],
-data["phone"],
-data["room"],
-msg.text.strip()
-
-await state.clear()
-
-await msg.answer(
-    f"✅ <b>Broningiz qabul qilindi!</b>\n\n"
-    f"🏠 Xona: {data['room']}\n"
-    f"👤 Ism: {data['full_name']}\n"
-    f"📱 Tel: {data['phone']}\n"
-    f"📅 Vaqt: {msg.text.strip()}",
-    parse_mode="HTML",
-    reply_markup=main_menu()
-)
+    await msg.answer(
+        f"✅ <b>Broningiz qabul qilindi!</b>\n\n",
+        parse_mode="HTML"
+    )
 
 except Exception as e:
-print("BOOKING ERROR:", e)
+    print("BOOKING ERROR:", e)
 
-await msg.answer(
-    "❌ Bron saqlashda xatolik yuz berdi. Qayta urinib ko'ring."
-)
+    await msg.answer(
+        "❌ Bron saqlashda xatolik yuz berdi. Qayta urinib ko'ring."
+    )
+
+finally:
+    user_locks.discard(msg.from_user.id)
 
         await bot.send_message(
             ADMIN_ID,
