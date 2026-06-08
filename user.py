@@ -463,7 +463,7 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         return
 
     try:
-        booking_id = await db.add_booking(
+    booking_id = await db.add_booking(
         msg.from_user.id,
         data["full_name"],
         data["phone"],
@@ -471,14 +471,14 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
         msg.text.strip()
     )
 
-     await state.clear()
+    await state.clear()
 
-     await msg.answer(
+    await msg.answer(
         f"✅ <b>Broningiz qabul qilindi!</b>\n\n",
         parse_mode="HTML"
     )
 
-     await bot.send_message(
+    await bot.send_message(
         ADMIN_ID,
         f"📋 <b>Yangi bron so'rovi #{booking_id}</b>\n\n"
         f"👤 Ism: {data['full_name']}\n"
