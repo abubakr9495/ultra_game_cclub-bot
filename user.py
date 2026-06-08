@@ -462,7 +462,7 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
     )
     return
        
-       try:
+   try:
     booking_id = await db.add_booking(
         msg.from_user.id,
         data["full_name"],
