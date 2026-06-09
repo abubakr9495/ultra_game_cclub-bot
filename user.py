@@ -561,6 +561,7 @@ async def contact_message(msg: Message, state: FSMContext, bot: Bot):
         f"🆔 User ID: {msg.from_user.id}",
         parse_mode="HTML"
     )
+    
 @router.message(F.photo)
 async def get_file_id(msg: Message):
     await msg.answer(msg.photo[-1].file_id)
