@@ -207,6 +207,9 @@ async def profile(msg: Message):
         parse_mode="HTML"
     )
 
+# ─── PANEL 2: BONUSLARIM ─────────────────────────
+@router.message(F.text == "🎁 Mening bonuslarim")
+
 # ─── PANEL 2: BONUSLARIM ──────────────────────────────────
 @router.message(F.text == "🎁 Mening bonuslarim")
 async def my_bonuses(msg: Message):
@@ -444,12 +447,6 @@ async def cancel_booking_dt(msg: Message, state: FSMContext):
 @router.message(Booking.waiting_datetime)
 async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
     data = await state.get_data()
-    
-    if msg.from_user.id in user_locks:
-        await msg.answer("⏳ Kuting, so'rov qayta ishlanmoqda...")
-        return
-
-    user_locks.add(msg.from_user.id)
 
     busy = await db.is_time_busy(
         data["room"],
@@ -461,43 +458,52 @@ async def booking_datetime(msg: Message, state: FSMContext, bot: Bot):
             "❌ Bu vaqt band!\n\nBoshqa vaqt tanlang."
         )
         return
-        
+
     try:
         booking_id = await db.add_booking(
-        msg.from_user.id,
-        data["full_name"],
-        data["phone"],
-        data["room"],
-        msg.text.strip()
-    )
+            msg.from_user.id,
+            data["full_name"],
+            data["phone"],
+            data["room"],
+            msg.text.strip()
+        )
 
-    await state.clear()
+        await state.clear()
 
+        await msg.answer(
+            f"✅ <b>Broningiz qabul qilindi!</b>\n\n",
+            parse_mode="HTML"
+        )
+
+    except Exception as e:
+        print("BOOKING ERROR:", e)
+        await msg.answer(
+            "❌ Bron saqlashda xatolik yuz berdi. Qayta urinib ko'ring."
+        )
+        return
+    
     await msg.answer(
-        f"✅ <b>Broningiz qabul qilindi!</b>\n\n",
-        parse_mode="HTML"
+    f"✅ <b>Broningiz qabul qilindi!</b>\n\n"
+    f"🏠 Xona: {data['room']}\n"
+    f"👤 Ism: {data['full_name']}\n"
+    f"📱 Tel: {data['phone']}\n"
+    f"📅 Vaqt: {msg.text.strip()}\n\n"
+    f"⏳ <b>Hurmatli mijoz, sizga 5-10 daqiqa ichida javob kelmasa,\n"
+    f"quyidagi raqamga murojaat qiling:</b>\n📞 {CONTACT_PHONE}",
+    parse_mode="HTML",
+    reply_markup=main_menu()
     )
-
+    from keyboards import booking_action_kb
     await bot.send_message(
         ADMIN_ID,
-        f"📋 <b>Yangi bron so'rovi #{booking_id}</b>\n\n"
+        f"📅 <b>Yangi bron so'rovi #{booking_id}</b>\n\n"
         f"👤 Ism: {data['full_name']}\n"
         f"📱 Tel: {data['phone']}\n"
-        f"📅 Vaqt: {msg.text.strip()}\n"
+        f"📆 Vaqt: {msg.text.strip()}\n"
         f"🆔 User ID: {msg.from_user.id}",
         parse_mode="HTML",
         reply_markup=booking_action_kb(booking_id)
     )
-
-except Exception as e:
-    print("BOOKING ERROR:", e)
-
-    await msg.answer(
-        "❌ Bron saqlashda xatolik yuz berdi. Qayta urinib ko'ring."
-    )
-
-finally:
-    user_locks.discard(msg.from_user.id)
     
 # ─── PANEL 4: MUROJAT ─────────────────────────────────────
 @router.message(F.text == "📨 Murojat uchun")
@@ -561,7 +567,6 @@ async def contact_message(msg: Message, state: FSMContext, bot: Bot):
         f"🆔 User ID: {msg.from_user.id}",
         parse_mode="HTML"
     )
-    
 @router.message(F.photo)
 async def get_file_id(msg: Message):
     await msg.answer(msg.photo[-1].file_id)
@@ -582,10 +587,7 @@ async def referral_link(msg: Message, bot: Bot):
 
     link = f"https://t.me/{me.username}?start={msg.from_user.id}"
 
-    referal_count = await db.get_referral_count(msg.from_user.id)
-
     await msg.answer(
         f"👥 Referal havolangiz:\n\n{link}\n\n"
-        f"👤 Taklif qilgan do'stlaringiz: {referal_count} ta\n"
-        f"🎁 Har bir taklif uchun 1000 bonus beriladi."
+        "🎁 Har bir taklif qilgan do'stingiz uchun 1000 bonus beriladi."
     )
